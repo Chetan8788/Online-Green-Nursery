@@ -12,6 +12,18 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+	
+	
+	@ExceptionHandler(CustomerException.class)
+	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(PlanterException ce,WebRequest req){
+		
+		MyErrorDetails err = new MyErrorDetails();
+		err.setTimestamp(LocalDateTime.now());
+		err.setMessage(ce.getMessage());
+		err.setDetails(req.getDescription(false));
+		
+		return new ResponseEntity<MyErrorDetails>(err, HttpStatus.BAD_REQUEST);
+	}
 
 	
 	@ExceptionHandler(PlanterException.class)
