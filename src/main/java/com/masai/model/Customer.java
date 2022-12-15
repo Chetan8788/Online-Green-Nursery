@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,12 +31,16 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	static final String userType = "customer";
+	@Size(max = 15,min = 4,message = "username should be of max 15 and min 4 characrter")
 	private String name;
 	@Column(unique = true)
+	@Email(message = "Invalid formate of email")
 	private String email;
 	@Column(unique = true)
+	@Size(max = 15,min = 4,message = "username should be of max 15 and min 4 characrter")
 	private String username;
 	@JsonIgnore
+	@Min(value = 6)
 	private String password;
 	@JsonIgnore
 	@OneToMany(mappedBy = "customer")
@@ -45,21 +52,5 @@ public class Customer {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	private List<Order> orders = new ArrayList<>();
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Customer other = (Customer) obj;
-		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
 
 }
