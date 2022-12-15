@@ -36,7 +36,7 @@ public class Planter {
 	private Float rating;
 	private Float numberOfRatings;
 	@JsonIgnore
-	@OneToMany(mappedBy = "planter")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "planter")
 	private List<Comment> comments = new ArrayList<>();
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
