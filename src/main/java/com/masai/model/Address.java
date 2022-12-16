@@ -32,5 +32,5 @@ public class Address {
 	private String country;
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<Customer> customer = new HashSet<>();
+	private Set<Customer> customers = new HashSet<>();
 }
