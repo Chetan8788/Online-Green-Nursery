@@ -22,15 +22,17 @@ import lombok.Data;
 @Table(name = "orders")
 public class Order {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer OrderId;
 	private LocalDateTime orderDate;
 	private Integer quantity;
 	private Double totalCost;
 	private String transactionMode;
+	
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Planter> planters = new ArrayList<>();
+	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
