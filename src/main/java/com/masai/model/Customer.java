@@ -46,8 +46,8 @@ public class Customer {
 	@OneToMany(mappedBy = "customer")
 	private List<Comment> comments = new ArrayList<>();
 	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-	private Set<Address> address = new HashSet<>();
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "customers")
+	private Set<Address> addresses = new HashSet<>();
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	private List<Order> orders = new ArrayList<>();
