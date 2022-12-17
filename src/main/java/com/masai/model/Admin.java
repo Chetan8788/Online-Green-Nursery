@@ -18,7 +18,6 @@ public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	static final String userType = "admin";
 	private String name;
 	@Column(unique = true)
 	private String email;

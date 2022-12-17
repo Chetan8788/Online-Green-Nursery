@@ -24,12 +24,12 @@ public class SignupReqDto {
 	@NotBlank
 	@NotEmpty
 	@NotNull
-	@Size(min = 2, max = 20, message = "Name should be min 2 max 20 characters long")
+	@Size(min = 2, max = 20, message = "Username should be min 2 max 20 characters long")
 	private String username;
 	@NotBlank
 	@NotEmpty
 	@NotNull
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$", message = "Minimum 8-20 characters, at least one letter, one number and one special character")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$", message = "Password should be minimum 8-20 characters, at least one letter, one number and one special character")
 	private String password;
 
 }

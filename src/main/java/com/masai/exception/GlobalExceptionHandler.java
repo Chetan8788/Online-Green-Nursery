@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
 	
 	
 	@ExceptionHandler(CustomerException.class)
-	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(PlanterException ce,WebRequest req){
+	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(CustomerException ce,WebRequest req){
 		
 		MyErrorDetails err = new MyErrorDetails();
 		err.setTimestamp(LocalDateTime.now());
