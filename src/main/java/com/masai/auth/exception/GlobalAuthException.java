@@ -29,13 +29,4 @@ public class GlobalAuthException {
 		return new ResponseEntity<ErrorDetails>(err, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorDetails> handleException(Exception exception, WebRequest req) {
-		ErrorDetails err = new ErrorDetails();
-		err.setTime(LocalDateTime.now());
-		err.setDetails(req.getDescription(false));
-		err.setMessage(exception.getMessage());
-		return new ResponseEntity<ErrorDetails>(err, HttpStatus.BAD_REQUEST);
-	}
-
 }

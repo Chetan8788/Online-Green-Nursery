@@ -75,7 +75,7 @@ public class AdminController {
 
 	@DeleteMapping(value = "")
 	public ResponseEntity<SignupResDto> deleteAdmin(@RequestParam Integer id, @RequestHeader String token) {
-		int ider = authorization.isAuthorized(token, "admin");
+		authorization.isAuthorized(token, "admin");
 		Admin admin = adminService.deleteAdmin(id);
 		SignupResDto signupResDto = new SignupResDto();
 		signupResDto.setId(admin.getId());

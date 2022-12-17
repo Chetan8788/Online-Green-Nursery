@@ -23,6 +23,6 @@ public class SignupResDto {
 	@NotBlank
 	@NotEmpty
 	@NotNull
-	@Size(min = 2, max = 20, message = "Name should be min 2 max 20 characters long")
+	@Size(min = 2, max = 20, message = "Username should be min 2 max 20 characters long")
 	private String username;
 }

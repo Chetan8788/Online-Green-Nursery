@@ -22,8 +22,11 @@ import com.masai.auth.session.AdminSession;
 import com.masai.auth.session.AdminSessionService;
 import com.masai.auth.session.CustomerSession;
 import com.masai.auth.session.CustomerSessionService;
+import com.masai.exception.CustomerException;
 import com.masai.model.Admin;
+import com.masai.model.Customer;
 import com.masai.service.AdminService;
+import com.masai.service.CustomerService;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,26 +34,31 @@ public class AuthController {
 	@Autowired
 	AdminService adminService;
 	@Autowired
+	CustomerService customerService;
+	@Autowired
 	AdminSessionService adminSessionService;
 	@Autowired
 	CustomerSessionService customerSessionService;
 
 	@PostMapping(value = "/loginAsCustomer")
-	public ResponseEntity<LoginResDto> loginAsCustomer(@Valid @RequestBody LoginReqDto loginReqDto) {
+	public ResponseEntity<LoginResDto> loginAsCustomer(@Valid @RequestBody LoginReqDto loginReqDto)
+			throws CustomerException {
 
-		Admin admin = adminService.getAdminByEmail(loginReqDto.getEmail());
-		LocalDateTime timestamp = LocalDateTime.now();
+		Customer customer = customerService.getCustomerByEmail(loginReqDto.getEmail());
+		if (!customer.getPassword().equals(loginReqDto.getPasssword()))
+			throw new LoginLogoutException("Wrong credentials");
 		String token;
 		while (true) {
-			token = "" + (int) Math.random() * 100000;
+			token = "" + (int) (Math.random() * 1000000);
 			try {
 				customerSessionService.findSession(token);
 			} catch (LoginLogoutException e) {
 				break;
 			}
 		}
+		LocalDateTime timestamp = LocalDateTime.now();
 		CustomerSession customerSession = new CustomerSession();
-		customerSession.setCustomerId(admin.getId());
+		customerSession.setCustomerId(customer.getCustomerId());
 		customerSession.setTimestamp(timestamp);
 		customerSession.setToken(token);
 		customerSessionService.addSession(customerSession);
@@ -65,10 +73,12 @@ public class AuthController {
 	public ResponseEntity<LoginResDto> loginAsAdmin(@Valid @RequestBody LoginReqDto loginReqDto) {
 
 		Admin admin = adminService.getAdminByEmail(loginReqDto.getEmail());
-		LocalDateTime timestamp = LocalDateTime.now();
+		if (!admin.getPassword().equals(loginReqDto.getPasssword()))
+			throw new LoginLogoutException("Wrong credentials");
+
 		String token;
 		while (true) {
-			token = "" + (int) (Math.random() * 100000);
+			token = "" + (int) (Math.random() * 1000000);
 			try {
 				adminSessionService.findSessionByToken(token);
 			} catch (LoginLogoutException e) {
@@ -76,6 +86,7 @@ public class AuthController {
 			}
 
 		}
+		LocalDateTime timestamp = LocalDateTime.now();
 		AdminSession adminSession = new AdminSession();
 		adminSession.setAdminId(admin.getId());
 		adminSession.setTimestamp(timestamp);
@@ -102,8 +113,21 @@ public class AuthController {
 		return new ResponseEntity<LoginResDto>(loginResDto, HttpStatus.ACCEPTED);
 	}
 
-	@PostMapping(value = "/signup")
-	public ResponseEntity<Admin> signupAsCustomer(@Valid @RequestBody SignupReqDto singnupDto) {
+	@PostMapping(value = "/signup_customer")
+	public ResponseEntity<Customer> signupAsCustomer(@Valid @RequestBody SignupReqDto singnupDto)
+			throws CustomerException {
+		Customer customer = new Customer();
+		customer.setName(singnupDto.getName());
+		customer.setUsername(singnupDto.getUsername());
+		customer.setEmail(singnupDto.getEmail());
+		customer.setPassword(singnupDto.getPassword());
+		Customer createdCustomer = customerService.registerCustomer(customer);
+		return new ResponseEntity<Customer>(createdCustomer, HttpStatus.CREATED);
+
+	}
+
+	@PostMapping(value = "/signup_admin")
+	public ResponseEntity<Admin> signupAsAdmin(@Valid @RequestBody SignupReqDto singnupDto) throws CustomerException {
 		Admin admin = new Admin();
 		admin.setName(singnupDto.getName());
 		admin.setUsername(singnupDto.getUsername());
