@@ -9,7 +9,7 @@ public interface CustomerService {
 	
  public Customer registerCustomer(Customer customer) throws CustomerException;
 
- public List<Customer> getCustomerByEmail(String email)throws CustomerException;
+ public Customer getCustomerByEmail(String email)throws CustomerException;
  
  public Customer updateCustomer(Customer customer) throws CustomerException;
  

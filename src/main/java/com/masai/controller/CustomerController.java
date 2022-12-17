@@ -32,11 +32,11 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/customers/{email}")
-	public ResponseEntity<List<Customer>> getCustomerByEmail(@PathVariable("email") String email) throws CustomerException {
+	public ResponseEntity<Customer> getCustomerByEmail(@PathVariable("email") String email) throws CustomerException {
 		
-         List<Customer> customers=customerService.getAllCustomer();
+        Customer customer=customerService.getCustomerByEmail(email);
 		
-		return new ResponseEntity<List<Customer>>(customers,HttpStatus.OK);
+		return new ResponseEntity<Customer>(customer,HttpStatus.OK);
 	}
 	
 	@PutMapping("/customers")

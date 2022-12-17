@@ -29,10 +29,10 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public List<Customer> getCustomerByEmail(String email) throws CustomerException {
-		 List<Customer> customers= customerDao.findByEmail(email);
-		if(customers==null)throw new CustomerException("customer not found with email "+email);
-		else return customers;
+	public Customer getCustomerByEmail(String email) throws CustomerException {
+		 Customer customer= customerDao.findByEmail(email);
+		if(customer==null)throw new CustomerException("customer not found with email "+email);
+		else return customer;
 	}
 
 	@Override

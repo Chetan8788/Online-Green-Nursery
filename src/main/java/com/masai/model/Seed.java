@@ -21,8 +21,8 @@ import lombok.Data;
 @Table(name = "seeds")
 public class Seed {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer seedId;
 	private String commonName;
 	private String watering;
 	private String difficultyLevel;
@@ -32,9 +32,10 @@ public class Seed {
 	private Integer stock;
 	private Double cost;
 	private Integer seedsPerPacket;
+	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "seeds")
-	private Set<Planter> plnters = new HashSet<>();
+	private Set<Planter> planters = new HashSet<>();
 
 	@Override
 	public boolean equals(Object obj) {
@@ -45,11 +46,21 @@ public class Seed {
 		if (getClass() != obj.getClass())
 			return false;
 		Seed other = (Seed) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(commonName, other.commonName) && Objects.equals(cost, other.cost)
+				&& Objects.equals(desciption, other.desciption)
+				&& Objects.equals(difficultyLevel, other.difficultyLevel)
+				&& Objects.equals(seedsPerPacket, other.seedsPerPacket) && Objects.equals(stock, other.stock)
+				&& Objects.equals(temperature, other.temperature) && Objects.equals(type, other.type)
+				&& Objects.equals(watering, other.watering);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(commonName, cost, desciption, difficultyLevel, seedsPerPacket, stock, temperature, type,
+				watering);
 	}
+	
+	
+
+	
 }
