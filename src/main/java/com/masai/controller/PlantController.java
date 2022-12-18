@@ -54,8 +54,9 @@ public class PlantController {
 		return new ResponseEntity<Plant>(plantService.viewPlant(id), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "by_name/{id}")
+	@GetMapping(value = "by_name/{commonName}")
 	public ResponseEntity<Plant> viewPlant(@PathVariable String commonName) {
+
 		return new ResponseEntity<Plant>(plantService.viewPlant(commonName), HttpStatus.OK);
 	}
 
@@ -64,7 +65,7 @@ public class PlantController {
 		return new ResponseEntity<List<Plant>>(plantService.viewAllPlants(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/by_type/{id}")
+	@GetMapping(value = "/by_type/{typeOfPlant}")
 	public ResponseEntity<List<Plant>> viewAllPlant(@PathVariable String typeOfPlant) {
 		return new ResponseEntity<List<Plant>>(plantService.viewAllPlants(typeOfPlant), HttpStatus.OK);
 	}

@@ -9,12 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.auth.Authorization;
@@ -24,6 +26,7 @@ import com.masai.service.PlanterService;
 @RestController
 @RequestMapping(value = "planters")
 public class PlanterController {
+	@Autowired
 	PlanterService planterService;
 	@Autowired
 	Authorization authorization;
@@ -31,13 +34,28 @@ public class PlanterController {
 	@PostMapping(value = "")
 	public ResponseEntity<Planter> addPlanter(@Valid @RequestBody Planter planter, @RequestHeader String token) {
 		authorization.isAuthorized(token, "admin");
-
 		return new ResponseEntity<Planter>(planterService.addPlanter(planter), HttpStatus.CREATED);
 
 	}
 
+	@PatchMapping(value = "seeds")
+	public ResponseEntity<String> addSeedsInPlanter(@RequestParam Integer planterId, @RequestParam Integer SeedId,
+			@RequestHeader String token) {
+		authorization.isAuthorized(token, "admin");
+		return new ResponseEntity<String>(planterService.addSeedsInPlanter(planterId, SeedId), HttpStatus.CREATED);
+
+	}
+
+	@PatchMapping(value = "plants")
+	public ResponseEntity<String> addPlanInPlanter(@RequestParam Integer planterId, @RequestParam Integer plantId,
+			@RequestHeader String token) {
+		authorization.isAuthorized(token, "admin");
+		return new ResponseEntity<String>(planterService.addPlantInPlanter(planterId, plantId), HttpStatus.CREATED);
+
+	}
+
 	@PutMapping(value = "")
-	public ResponseEntity<Planter> updatePlant(@Valid @RequestBody Planter planter, @RequestHeader String token) {
+	public ResponseEntity<Planter> updatePlanter(@Valid @RequestBody Planter planter, @RequestHeader String token) {
 		authorization.isAuthorized(token, "admin");
 		return new ResponseEntity<Planter>(planterService.updatePlanter(planter), HttpStatus.OK);
 	}
@@ -53,7 +71,7 @@ public class PlanterController {
 		return new ResponseEntity<Planter>(planterService.viewPlanter(id), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "byShape/{id}")
+	@GetMapping(value = "byShape/{plantrShape}")
 	public ResponseEntity<List<Planter>> viewPlantByShape(@PathVariable String plantrShape) {
 		return new ResponseEntity<List<Planter>>(planterService.viewPlanter(plantrShape), HttpStatus.OK);
 	}

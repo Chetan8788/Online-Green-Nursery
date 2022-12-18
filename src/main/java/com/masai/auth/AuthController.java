@@ -45,8 +45,10 @@ public class AuthController {
 			throws CustomerException {
 
 		Customer customer = customerService.getCustomerByEmail(loginReqDto.getEmail());
-		if (!customer.getPassword().equals(loginReqDto.getPasssword()))
+
+		if (!customer.getPassword().equals(loginReqDto.getPassword()))
 			throw new LoginLogoutException("Wrong credentials");
+
 		String token;
 		while (true) {
 			token = "" + (int) (Math.random() * 1000000);
@@ -73,7 +75,7 @@ public class AuthController {
 	public ResponseEntity<LoginResDto> loginAsAdmin(@Valid @RequestBody LoginReqDto loginReqDto) {
 
 		Admin admin = adminService.getAdminByEmail(loginReqDto.getEmail());
-		if (!admin.getPassword().equals(loginReqDto.getPasssword()))
+		if (!admin.getPassword().equals(loginReqDto.getPassword()))
 			throw new LoginLogoutException("Wrong credentials");
 
 		String token;
@@ -126,6 +128,7 @@ public class AuthController {
 
 	}
 
+// just for testing
 	@PostMapping(value = "/signup_admin")
 	public ResponseEntity<Admin> signupAsAdmin(@Valid @RequestBody SignupReqDto singnupDto) throws CustomerException {
 		Admin admin = new Admin();

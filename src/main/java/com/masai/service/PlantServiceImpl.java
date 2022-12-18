@@ -48,7 +48,7 @@ public class PlantServiceImpl implements PlantService {
 	@Override
 	public Plant viewPlant(String commonName) throws PlantException {
 		Plant foundPlant = plantDao.findByCommonName(commonName)
-				.orElseThrow(() -> new PlantException("Plant does not exist"));
+				.orElseThrow(() -> new PlantException("Plant does not exist by the given name"));
 		return foundPlant;
 	}
 

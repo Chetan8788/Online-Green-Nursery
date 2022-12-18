@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -33,6 +35,7 @@ public class Planter {
 	private Double cost;
 	private Float rating;
 	private Long numberOfRatings;
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "planter")
 	private List<Comment> comments = new ArrayList<>();
 	@ManyToMany(cascade = CascadeType.ALL)

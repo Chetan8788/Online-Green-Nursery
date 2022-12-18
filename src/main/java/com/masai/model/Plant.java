@@ -29,7 +29,7 @@ public class Plant {
 	private String bloomTime;
 	private String medicinalOrCulinaryUse;
 	private String difficultyLevel;
-	private String temperature;
+	private Float temperature;
 	private String type;
 	private String desciption;
 	private Integer stock;

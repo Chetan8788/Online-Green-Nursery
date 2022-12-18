@@ -28,11 +28,9 @@ public class Order {
 	private Integer quantity;
 	private Double totalCost;
 	private String transactionMode;
-	
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Planter> planters = new ArrayList<>();
-	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;

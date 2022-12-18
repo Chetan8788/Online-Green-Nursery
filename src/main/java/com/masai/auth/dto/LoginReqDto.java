@@ -15,6 +15,6 @@ public class LoginReqDto {
 	@NotBlank
 	@NotNull
 	@NotEmpty
-	private String passsword;
+	private String password;
 
 }

@@ -5,14 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.exception.PlantException;
 import com.masai.exception.PlanterException;
+import com.masai.exception.SeedException;
+import com.masai.model.Plant;
 import com.masai.model.Planter;
+import com.masai.model.Seed;
+import com.masai.repository.PlantDao;
 import com.masai.repository.PlanterDao;
+import com.masai.repository.SeedDao;
 
 @Service
 public class PlanterServiceImpl implements PlanterService {
 	@Autowired
 	PlanterDao planterDao;
+	@Autowired
+	SeedDao seedDao;
+	@Autowired
+	PlantDao plantDao;
 
 	@Override
 	public Planter addPlanter(Planter planter) throws PlanterException {
@@ -20,6 +30,28 @@ public class PlanterServiceImpl implements PlanterService {
 			throw new PlanterException("Please, provide valid data");
 
 		return planterDao.save(planter);
+	}
+
+	@Override
+	public String addSeedsInPlanter(Integer planterId, Integer seedId) throws PlanterException, SeedException {
+		Seed seed = seedDao.findById(seedId).orElseThrow(() -> new SeedException("Seed not found"));
+		Planter planter = planterDao.findById(planterId).orElseThrow(() -> new PlanterException("Planter not found"));
+		planter.getSeeds().add(seed);
+		seed.getPlanters().add(planter);
+		planterDao.save(planter);
+		return "Done...";
+	}
+
+	@Override
+	public String addPlantInPlanter(Integer planterId, Integer plantId) throws PlanterException, PlantException {
+
+		Plant plant = plantDao.findById(plantId).orElseThrow(() -> new PlantException("Plant not found"));
+		Planter planter = planterDao.findById(planterId).orElseThrow(() -> new PlanterException("Planter not found"));
+		planter.getPlants().add(plant);
+		plant.getPlanters().add(planter);
+
+		planterDao.save(planter);
+		return "Done...";
 	}
 
 	@Override
@@ -67,4 +99,5 @@ public class PlanterServiceImpl implements PlanterService {
 			throw new PlanterException("No record found in the database");
 		return foundPlanterList;
 	}
+
 }
