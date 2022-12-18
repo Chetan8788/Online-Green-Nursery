@@ -24,6 +24,9 @@ public class CustomerServiceImpl implements CustomerService{
 //		for(Order o:orders) {
 //			o.setCustomer(customer);
 //		}
+		
+		Customer existingCustomer=customerDao.findByEmail(customer.getEmail());
+		if(existingCustomer!=null) throw new CustomerException("Customer already exist with email : "+customer.getEmail());
 
 		 return customerDao.save(customer); 
 	}
