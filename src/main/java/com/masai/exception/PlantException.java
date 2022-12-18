@@ -1,6 +1,6 @@
 package com.masai.exception;
 
-public class PlantException extends Exception{
+public class PlantException extends RuntimeException {
 
 	public PlantException() {
 		super();
@@ -12,5 +12,4 @@ public class PlantException extends Exception{
 		// TODO Auto-generated constructor stub
 	}
 
-	
 }

@@ -9,8 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import lombok.Data;
 
@@ -23,13 +23,12 @@ public class Comment {
 	private Integer id;
 	private LocalDateTime timeStamp;
 	private String commentString;
-	private Long likes;
-	private Long dislikes;
-	@JsonIgnore
+	@Min(0)
+	@Max(5)
+	private Float rating;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Planter planter;
-	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Customer customers;
+	private Customer customer;
 
 }

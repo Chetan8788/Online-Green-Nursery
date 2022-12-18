@@ -15,8 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
@@ -34,14 +32,11 @@ public class Planter {
 	private Integer stock;
 	private Double cost;
 	private Float rating;
-	private Float numberOfRatings;
-	@JsonIgnore
+	private Long numberOfRatings;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "planter")
 	private List<Comment> comments = new ArrayList<>();
-	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Plant> plants = new HashSet<>();
-	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Seed> seeds = new HashSet<>();
 
