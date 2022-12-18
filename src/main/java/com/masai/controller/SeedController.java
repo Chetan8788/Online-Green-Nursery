@@ -75,7 +75,7 @@ public class SeedController {
 		
 	}
 	
-	@GetMapping("/getByType/{typeOfSeed}")
+	@GetMapping("/getSeedsByType/{typeOfSeed}")
 	public ResponseEntity<List<Seed>>viewAllSeedsByType(@PathVariable("typeOfSeed")  String typeOfSeed) throws SeedException {
 		
 		List<Seed> seeds=seedService.viewAllSeedsByType(typeOfSeed);
