@@ -13,26 +13,38 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
+	@ExceptionHandler(OrderException.class)
+	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(OrderException orderException,WebRequest webRequest){
+		
+		MyErrorDetails error = new MyErrorDetails();
+		error.setTimestamp(LocalDateTime.now());
+		error.setMessage(orderException.getMessage());
+		error.setDetails(webRequest.getDescription(false));
+		
+		return new ResponseEntity<MyErrorDetails>(error, HttpStatus.BAD_REQUEST);
+	}
+	
+	
 	@ExceptionHandler(SeedException.class)
 	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(SeedException seedException,WebRequest webRequest){
 		
-		MyErrorDetails err = new MyErrorDetails();
-		err.setTimestamp(LocalDateTime.now());
-		err.setMessage(seedException.getMessage());
-		err.setDetails(webRequest.getDescription(false));
+		MyErrorDetails error = new MyErrorDetails();
+		error.setTimestamp(LocalDateTime.now());
+		error.setMessage(seedException.getMessage());
+		error.setDetails(webRequest.getDescription(false));
 		
-		return new ResponseEntity<MyErrorDetails>(err, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<MyErrorDetails>(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(CustomerException.class)
 	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(CustomerException customerException,WebRequest webRequest){
 		
-		MyErrorDetails err = new MyErrorDetails();
-		err.setTimestamp(LocalDateTime.now());
-		err.setMessage(customerException.getMessage());
-		err.setDetails(webRequest.getDescription(false));
+		MyErrorDetails error = new MyErrorDetails();
+		error.setTimestamp(LocalDateTime.now());
+		error.setMessage(customerException.getMessage());
+		error.setDetails(webRequest.getDescription(false));
 		
-		return new ResponseEntity<MyErrorDetails>(err, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<MyErrorDetails>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	
