@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
@@ -25,11 +23,9 @@ public class Comment {
 	private String commentString;
 	private Long likes;
 	private Long dislikes;
-	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Planter planter;
-	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Customer customers;
+	private Customer customer;
 
 }

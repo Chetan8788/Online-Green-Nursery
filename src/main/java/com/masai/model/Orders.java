@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Orders {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer OrderId;

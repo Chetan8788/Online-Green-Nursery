@@ -1,17 +1,15 @@
 package com.masai.exception;
 
-public class CustomerException extends Exception{
+public class CustomerException extends RuntimeException {
 
 	public CustomerException() {
 		super();
-		
+
 	}
 
 	public CustomerException(String message) {
 		super(message);
-		
+
 	}
-	
-	
 
 }

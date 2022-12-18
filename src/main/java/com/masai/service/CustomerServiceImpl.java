@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.CustomerException;
 import com.masai.model.Customer;
-import com.masai.model.Order;
+import com.masai.model.Orders;
 import com.masai.repository.CustomerDao;
 
 @Service

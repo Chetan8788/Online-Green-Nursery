@@ -53,7 +53,7 @@ public class Customer {
 	private Address address;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-	private Set<Order> orders = new HashSet<Order>();
+	private Set<Orders> orders = new HashSet<Orders>();
 
 	@Override
 	public int hashCode() {
