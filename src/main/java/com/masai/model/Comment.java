@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -26,7 +25,6 @@ public class Comment {
 	private String commentString;
 	@Min(0)
 	@Max(5)
-	@NotNull
 	private Float rating;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Planter planter;
