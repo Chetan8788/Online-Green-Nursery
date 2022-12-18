@@ -37,6 +37,12 @@ public class CommentServiceImpl implements CommentService {
 //		Customer customer = customerDao.findById(comment.getCustomer().getCustomerId()).orElseThrow(()-> new CommentException("Sorry, user doesnot exit"));
 		Planter planter = planterDao.findById(comment.getPlanter().getId())
 				.orElseThrow(() -> new CommentException("Planter does not exit"));
+		if (comment.getRating() != null) {
+			Long nRatings = planter.getNumberOfRatings() + 1;
+			Float ratings = planter.getRating();
+			Float newRatings = ((ratings * nRatings) + comment.getRating()) / nRatings;
+
+		}
 		return commentDao.save(comment);
 	}
 
@@ -50,6 +56,14 @@ public class CommentServiceImpl implements CommentService {
 	public Comment updateComment(Comment comment) throws CommentException {
 		Comment foundcomment = commentDao.findById(comment.getId())
 				.orElseThrow(() -> new CommentException("Comment not found.."));
+		Planter planter = planterDao.findById(comment.getPlanter().getId())
+				.orElseThrow(() -> new CommentException("Planter does not exit"));
+		if (comment.getRating() != null) {
+			Long nRatings = planter.getNumberOfRatings() + 1;
+			Float ratings = planter.getRating();
+			Float newRatings = ((ratings * nRatings) + comment.getRating()) / nRatings;
+
+		}
 		return commentDao.save(comment);
 	}
 

@@ -32,7 +32,7 @@ public class Planter {
 	private Integer stock;
 	private Double cost;
 	private Float rating;
-	private Float numberOfRatings;
+	private Long numberOfRatings;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "planter")
 	private List<Comment> comments = new ArrayList<>();
 	@ManyToMany(cascade = CascadeType.ALL)

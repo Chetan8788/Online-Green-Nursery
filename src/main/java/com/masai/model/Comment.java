@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -21,8 +24,10 @@ public class Comment {
 	private Integer id;
 	private LocalDateTime timeStamp;
 	private String commentString;
-	private Long likes;
-	private Long dislikes;
+	@Min(0)
+	@Max(5)
+	@NotNull
+	private Float rating;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Planter planter;
 	@ManyToOne(cascade = CascadeType.ALL)
