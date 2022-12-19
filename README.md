@@ -1,5 +1,5 @@
-# Nursery Plant Application  
-In this Application Admin can register a customer , planter ,Plant and seeds and Admin can delete all of these. A customer can register himself/herself and login and after login customer can see all present Planter, Plant and seeds and if customer want to purchase anything then customer can place a order as well.
+# Online Green Nursery 
+In this Application, Admin can add, update, and delete planters, Plants, and seeds. Anyone can see the list of products and after login, they can make an order.
 # Objevtive:
 The objective to create this project was to implement all things which we have learned , how to contribute in a collaborative project as a team player and face some challenges which can be occur in real time project.We made a Backend Application to perform CRUD operation and made RestFul APIs Service Using java, SpringBoot, lombok and swagger-UI for Nursery Plant Application.
 
