@@ -8,7 +8,7 @@ The objective to create this project was to implement all things which we have l
 
 
 
-![ERDiagram](https://github.com/nitinpal0211/mucho-interest-4403/blob/main/Plant_Nursery_Application/Er_And_Images/erDiagram.png?raw=true)
+![ERDiagram](https://github.com/Chetan8788/lying-fish-4087/blob/main/src/main/resources/static/ERDiagram.png)
 
 
 [# Modules:]
