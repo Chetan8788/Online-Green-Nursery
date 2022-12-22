@@ -38,14 +38,13 @@ public class OrderServiceImpl implements OrderService {
 			throw new OrderException("There is no enough stock");
 		planter.setStock(totalStock - orderReqDto.getQuantity());
 		Order order = new Order();
-//		order.setCustomer(customer);
+		order.setCustomer(customer);
 		order.setOrderDate(LocalDateTime.now());
 		order.getPlanters().add(planter);
 		order.setTransactionMode(orderReqDto.getTransactionMode());
 		order.setQuantity(orderReqDto.getQuantity());
 		order.setTotalCost(orderReqDto.getQuantity() * planter.getCost());
 		customer.getOrders().add(order);
-//		customerDao.save(customer);
 		return orderDao.save(order);
 
 	}
