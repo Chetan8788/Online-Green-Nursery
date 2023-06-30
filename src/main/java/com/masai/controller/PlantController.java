@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.auth.Authorization;
 import com.masai.model.Plant;
 import com.masai.service.PlantService;
 
@@ -26,26 +24,21 @@ import com.masai.service.PlantService;
 public class PlantController {
 	@Autowired
 	PlantService plantService;
-	@Autowired
-	Authorization authorization;
 
 	@PostMapping(value = "")
-	public ResponseEntity<Plant> addPlant(@Valid @RequestBody Plant plant, @RequestHeader String token) {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Plant> addPlant(@Valid @RequestBody Plant plant) {
 
 		return new ResponseEntity<Plant>(plantService.addPlant(plant), HttpStatus.CREATED);
 
 	}
 
 	@PutMapping(value = "")
-	public ResponseEntity<Plant> updatePlant(@Valid @RequestBody Plant plant, @RequestHeader String token) {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Plant> updatePlant(@Valid @RequestBody Plant plant) {
 		return new ResponseEntity<Plant>(plantService.updatePlant(plant), HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Plant> deletePlant(@PathVariable Integer id, @RequestHeader String token) {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Plant> deletePlant(@PathVariable Integer id) {
 		return new ResponseEntity<Plant>(plantService.deletePlant(id), HttpStatus.OK);
 	}
 

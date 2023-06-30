@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.auth.Authorization;
-import com.masai.auth.exception.AuthException;
 import com.masai.model.Comment;
 import com.masai.service.CommentService;
 import com.masai.service.CustomerService;
@@ -31,8 +28,6 @@ import com.masai.service.PlanterService;
 public class CommentController {
 	@Autowired
 	CommentService commentService;
-	@Autowired
-	Authorization authorization;
 	@Autowired
 	CustomerService customerService;
 	@Autowired
@@ -64,25 +59,21 @@ public class CommentController {
 	}
 
 	@PostMapping(value = "")
-	public ResponseEntity<Comment> addComment(@Valid @RequestBody Comment comment, @RequestHeader String token) {
+	public ResponseEntity<Comment> addComment(@Valid @RequestBody Comment comment) {
 		return new ResponseEntity<Comment>(commentService.addComment(comment), HttpStatus.CREATED);
 
 	}
 
 	@PutMapping(value = "")
-	public ResponseEntity<Comment> updateComment(@Valid @RequestBody Comment comment, @RequestHeader String token) {
-		Integer id = authorization.isAuthorized(token, "customer");
-		if (id != comment.getCustomer().getCustomerId())
-			throw new AuthException("Sorry you can not update others post");
+	public ResponseEntity<Comment> updateComment(@Valid @RequestBody Comment comment) {
+
 		return new ResponseEntity<Comment>(commentService.updateComment(comment), HttpStatus.CREATED);
 
 	}
 
 	@DeleteMapping(value = "{id}")
-	public ResponseEntity<Comment> deleteComment(@PathVariable Integer id, @RequestHeader String token) {
-		Integer cid = authorization.isAuthorized(token, "customer");
-		if (commentService.viewComment(id).getCustomer().getCustomerId() != cid)
-			throw new AuthException("Sorry you can not update others post");
+	public ResponseEntity<Comment> deleteComment(@PathVariable Integer id) {
+
 		return new ResponseEntity<Comment>(commentService.deleteComment(id), HttpStatus.CREATED);
 
 	}

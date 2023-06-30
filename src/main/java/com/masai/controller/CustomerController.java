@@ -2,6 +2,7 @@ package com.masai.controller;
 
 import java.util.List;
 
+import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.auth.Authorization;
-import com.masai.auth.exception.AuthException;
 import com.masai.exception.CustomerException;
 import com.masai.model.Customer;
 import com.masai.service.CustomerService;
@@ -27,8 +26,6 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
-	@Autowired
-	private Authorization authorization;
 
 	@PostMapping("/customers")
 	public ResponseEntity<Customer> registerCustomer(@Valid @RequestBody Customer customer) throws CustomerException {
@@ -45,22 +42,16 @@ public class CustomerController {
 	}
 
 	@PutMapping("/customers")
-	public ResponseEntity<Customer> updateCustomer(@Valid @RequestBody Customer customer, @RequestHeader String token)
-			throws CustomerException {
-		Integer id = authorization.isAuthorized(token, "customer");
-		if (customer.getCustomerId() != id)
-			throw new AuthException("Unauthorised to update this customer");
+	public ResponseEntity<Customer> updateCustomer(@Valid @RequestBody Customer customer) throws CustomerException {
+
 		Customer existingCustomer = customerService.updateCustomer(customer);
 		return new ResponseEntity<Customer>(existingCustomer, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/customers/{customerId}")
-	public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") Integer customerId,
-			@RequestHeader String token) throws CustomerException {
+	public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") Integer customerId)
+			throws CustomerException {
 
-		Integer id = authorization.isAuthorized(token, "customer");
-		if (customerId != id)
-			throw new AuthException("Unauthorised to delete");
 		Customer customer = customerService.deleteCustomer(customerId);
 
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
@@ -68,11 +59,8 @@ public class CustomerController {
 	}
 
 	@GetMapping("/getcustomers/{customerId}")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") Integer customerId,
-			@RequestHeader String token) throws CustomerException {
-		Integer id = authorization.isAuthorized(token, "customer");
-		if (customerId != id)
-			authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") Integer customerId)
+			throws CustomerException {
 
 		Customer customer = customerService.getCustomerById(customerId);
 
@@ -80,8 +68,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/customers")
-	public ResponseEntity<List<Customer>> getAllCustomer(@RequestHeader String token) throws CustomerException {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<List<Customer>> getAllCustomer() throws CustomerException {
 		List<Customer> customers = customerService.getAllCustomer();
 
 		return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);

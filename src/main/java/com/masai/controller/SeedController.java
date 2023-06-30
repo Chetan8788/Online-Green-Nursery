@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.auth.Authorization;
 import com.masai.exception.SeedException;
 import com.masai.model.Seed;
 import com.masai.service.SeedService;
@@ -25,13 +23,9 @@ import com.masai.service.SeedService;
 public class SeedController {
 	@Autowired
 	private SeedService seedService;
-	@Autowired
-	Authorization authorization;
 
 	@PostMapping("/seeds")
-	public ResponseEntity<Seed> addSeed(@Valid @RequestBody Seed seed, @RequestHeader String token)
-			throws SeedException {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Seed> addSeed(@Valid @RequestBody Seed seed) throws SeedException {
 		Seed registeredSeed = seedService.addSeed(seed);
 
 		return new ResponseEntity<Seed>(registeredSeed, HttpStatus.CREATED);
@@ -39,9 +33,7 @@ public class SeedController {
 	}
 
 	@PutMapping("/seeds")
-	public ResponseEntity<Seed> updateSeed(@Valid @RequestBody Seed seed, @RequestHeader String token)
-			throws SeedException {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Seed> updateSeed(@Valid @RequestBody Seed seed) throws SeedException {
 		Seed updatedSeed = seedService.updateSeed(seed);
 
 		return new ResponseEntity<Seed>(updatedSeed, HttpStatus.OK);
@@ -49,9 +41,7 @@ public class SeedController {
 	}
 
 	@DeleteMapping("/seeds{seedId}")
-	public ResponseEntity<Seed> deleteSeed(@PathVariable Integer seedId, @RequestHeader String token)
-			throws SeedException {
-		authorization.isAuthorized(token, "admin");
+	public ResponseEntity<Seed> deleteSeed(@PathVariable Integer seedId) throws SeedException {
 		Seed deletedSeed = seedService.deleteSeed(seedId);
 
 		return new ResponseEntity<Seed>(deletedSeed, HttpStatus.OK);
