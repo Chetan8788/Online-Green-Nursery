@@ -8,5 +8,5 @@ public class UpdateOrderDto {
 	private Integer quantity;
 	private String transactionMode;
 	private Integer PlanterID;
-	private Integer customerId;
+	private Integer userId;
 }

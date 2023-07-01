@@ -11,7 +11,7 @@ import com.masai.model.Comment;
 @Repository
 public interface CommentDao extends JpaRepository<Comment, Integer> {
 
-	List<Comment> findByCustomer(Integer customerId);
+	List<Comment> findByUser(Integer userId);
 
 	List<Comment> findByPlanter(Integer planterId);
 
