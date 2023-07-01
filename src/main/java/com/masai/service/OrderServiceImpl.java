@@ -32,18 +32,35 @@ public class OrderServiceImpl implements OrderService {
 	UserDao userDao;
 	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+	/**
+	 * Adds a new order.
+	 *
+	 * @param orderReqDto The OrderReqDto object containing the order details.
+	 * @param userId      The ID of the user placing the order.
+	 * @return The created Order object.
+	 * @throws OrderException if there is an error while adding the order or if the
+	 *                        associated planter or user does not exist, or if there
+	 *                        is not enough stock of the planter.
+	 */
 	@Override
 	public Order addOrder(OrderReqDto orderReqDto, Integer userId) throws OrderException {
+		// Find the planter associated with the order
 		Planter planter = planterDao.findById(orderReqDto.getPlanterID())
 				.orElseThrow(() -> new OrderException("Planter not found"));
-		logger.info("planter {}", planter);
+
+		// Find the user placing the order
 		User user = userDao.findById(userId).orElseThrow(() -> new OrderException("User not found"));
-		logger.info("user {}", user);
+
+		// Check if there is enough stock of the planter
 		Integer totalStock = planter.getStock();
 		if (totalStock < orderReqDto.getQuantity()) {
 			throw new OrderException("There is not enough stock");
 		}
+
+		// Update the stock of the planter
 		planter.setStock(totalStock - orderReqDto.getQuantity());
+
+		// Create a new order
 		Order order = new Order();
 		order.setUser(user);
 		order.setOrderDate(LocalDateTime.now());
@@ -51,27 +68,52 @@ public class OrderServiceImpl implements OrderService {
 		order.setTransactionMode(orderReqDto.getTransactionMode());
 		order.setQuantity(orderReqDto.getQuantity());
 		order.setTotalCost(orderReqDto.getQuantity() * planter.getCost());
+
+		// Update the user's order list
 		user.getOrders().add(order);
+
+		// Save the order
 		return orderDao.save(order);
 	}
 
+	/**
+	 * Updates an existing order.
+	 *
+	 * @param updateOrderDto The UpdateOrderDto object containing the updated order
+	 *                       details.
+	 * @return The updated Order object.
+	 * @throws OrderException if the order is not found with the given ID or if the
+	 *                        associated planter or user does not exist, or if there
+	 *                        is not enough stock of the planter.
+	 */
 	@Override
 	public Order updateOrder(UpdateOrderDto updateOrderDto) throws OrderException {
+		// Find the existing order to be updated
 		Order orderPre = orderDao.findById(updateOrderDto.getOrderId())
 				.orElseThrow(() -> new OrderException("Order not Found..."));
+
+		// Retrieve the planter associated with the existing order
 		Planter planterPre = orderPre.getPlanters().get(0);
 		planterPre.setStock(planterPre.getStock() + orderPre.getQuantity());
+
+		// Find the new planter for the updated order
 		Planter planter = planterDao.findById(updateOrderDto.getPlanterID())
 				.orElseThrow(() -> new OrderException("Planter not found"));
-		logger.info("planter {}", planter);
+
+		// Find the customer associated with the order
 		User customer = userDao.findById(updateOrderDto.getUserId())
 				.orElseThrow(() -> new OrderException("User not found"));
-		logger.info("customer {}", customer);
+
+		// Check if there is enough stock of the new planter
 		Integer totalStock = planter.getStock();
 		if (totalStock < updateOrderDto.getQuantity()) {
 			throw new OrderException("There is not enough stock");
 		}
+
+		// Update the stock of the new planter
 		planter.setStock(totalStock - updateOrderDto.getQuantity());
+
+		// Create a new order with the updated details
 		Order order = new Order();
 		order.setOrderId(updateOrderDto.getOrderId());
 		order.setUser(customer);
@@ -80,9 +122,18 @@ public class OrderServiceImpl implements OrderService {
 		order.setTransactionMode(updateOrderDto.getTransactionMode());
 		order.setQuantity(updateOrderDto.getQuantity());
 		order.setTotalCost(updateOrderDto.getQuantity() * planter.getCost());
+
+		// Save the updated order
 		return orderDao.save(order);
 	}
 
+	/**
+	 * Deletes an order.
+	 *
+	 * @param orderId The ID of the order to be deleted.
+	 * @return The deleted Order object.
+	 * @throws OrderException if the order is not found with the given ID.
+	 */
 	@Override
 	public Order deleteOrder(Integer orderId) throws OrderException {
 		Optional<Order> optional = orderDao.findById(orderId);
@@ -95,6 +146,13 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
+	/**
+	 * Retrieves an order by ID.
+	 *
+	 * @param orderId The ID of the order to be retrieved.
+	 * @return The Order object.
+	 * @throws OrderException if the order is not found with the given ID.
+	 */
 	@Override
 	public Order viewOrder(Integer orderId) throws OrderException {
 		logger.info("Viewing order with id {}", orderId);
@@ -102,6 +160,12 @@ public class OrderServiceImpl implements OrderService {
 				.orElseThrow(() -> new OrderException("Order not found with order id: " + orderId));
 	}
 
+	/**
+	 * Retrieves all orders.
+	 *
+	 * @return The list of all Order objects.
+	 * @throws OrderException if there is an error while fetching the orders.
+	 */
 	@Override
 	public List<Order> viewAllOrders() throws OrderException {
 		logger.info("Viewing all orders");

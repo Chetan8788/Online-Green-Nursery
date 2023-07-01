@@ -17,6 +17,10 @@ import com.masai.repository.CommentDao;
 import com.masai.repository.UserDao;
 import com.masai.repository.PlanterDao;
 
+/**
+ * The CommentServiceImpl class implements the CommentService interface and
+ * provides methods to perform CRUD operations on comments.
+ */
 @Service
 public class CommentServiceImpl implements CommentService {
 	private static final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
@@ -30,6 +34,13 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	PlanterDao planterDao;
 
+	/**
+	 * Fetches a comment by ID.
+	 *
+	 * @param id The ID of the comment to fetch.
+	 * @return The retrieved Comment object.
+	 * @throws CommentException if the comment is not found with the given ID.
+	 */
 	@Override
 	public Comment viewComment(Integer id) throws CommentException {
 		logger.info("Fetching comment by ID: {}", id);
@@ -38,6 +49,14 @@ public class CommentServiceImpl implements CommentService {
 		return comment;
 	}
 
+	/**
+	 * Adds a new comment.
+	 *
+	 * @param comment The Comment object containing the comment details.
+	 * @return The created Comment object.
+	 * @throws CommentException if there is an error while adding the comment or if
+	 *                          the associated planter does not exist.
+	 */
 	@Override
 	public Comment addComment(Comment comment) throws CommentException {
 		logger.info("Adding comment");
@@ -63,6 +82,13 @@ public class CommentServiceImpl implements CommentService {
 		return savedComment;
 	}
 
+	/**
+	 * Deletes a comment by ID.
+	 *
+	 * @param id The ID of the comment to delete.
+	 * @return The deleted Comment object.
+	 * @throws CommentException if the comment is not found with the given ID.
+	 */
 	@Override
 	public Comment deleteComment(Integer id) throws CommentException {
 		logger.info("Deleting comment with ID: {}", id);
@@ -74,6 +100,14 @@ public class CommentServiceImpl implements CommentService {
 		return foundComment;
 	}
 
+	/**
+	 * Updates an existing comment.
+	 *
+	 * @param comment The Comment object containing the updated comment details.
+	 * @return The updated Comment object.
+	 * @throws CommentException if the comment is not found with the given ID or if
+	 *                          the associated planter does not exist.
+	 */
 	@Override
 	public Comment updateComment(Comment comment) throws CommentException {
 		logger.info("Updating comment with ID: {}", comment.getId());
@@ -98,6 +132,16 @@ public class CommentServiceImpl implements CommentService {
 		return updatedComment;
 	}
 
+	/**
+	 * Fetches all comments by a user.
+	 *
+	 * @param userId The ID of the user.
+	 * @return The list of comments made by the user.
+	 * @throws CommentException if there is an error while fetching the comments or
+	 *                          if the user is not found with the given ID.
+	 * @throws UserException    if there is an error while fetching the user with
+	 *                          the given ID.
+	 */
 	@Override
 	public List<Comment> viewCommentsByUser(Integer userId) throws CommentException, UserException {
 		logger.info("Fetching comments by User ID: {}", userId);
@@ -106,6 +150,16 @@ public class CommentServiceImpl implements CommentService {
 		return foundcommentList;
 	}
 
+	/**
+	 * Fetches all comments on a planter.
+	 *
+	 * @param planterId The ID of the planter.
+	 * @return The list of comments on the planter.
+	 * @throws CommentException if there is an error while fetching the comments or
+	 *                          if the planter is not found with the given ID.
+	 * @throws PlanterException if there is an error while fetching the planter with
+	 *                          the given ID.
+	 */
 	@Override
 	public List<Comment> viewCommentsOnPlanter(Integer planterId) throws CommentException, PlanterException {
 		logger.info("Fetching comments on Planter ID: {}", planterId);
@@ -114,6 +168,13 @@ public class CommentServiceImpl implements CommentService {
 		return foundcommentList;
 	}
 
+	/**
+	 * Fetches recent comments since the specified date.
+	 *
+	 * @param date The date to retrieve comments from.
+	 * @return The list of recent comments.
+	 * @throws CommentException if there is an error while fetching the comments.
+	 */
 	@Override
 	public List<Comment> viewRecentComments(LocalDateTime date) throws CommentException {
 		logger.info("Fetching recent comments since: {}", date);

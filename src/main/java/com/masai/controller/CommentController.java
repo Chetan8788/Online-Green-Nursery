@@ -27,10 +27,16 @@ import com.masai.model.Comment;
 import com.masai.service.CommentService;
 import com.masai.service.UserHelper;
 
+/**
+ * The CommentController class handles CRUD operations for comments. It provides
+ * methods for fetching comments by ID, user ID, planter ID, fetching recent
+ * comments, adding a new comment, updating a comment, and deleting a comment.
+ */
 @RestController
 @RequestMapping(value = "comments")
 @CrossOrigin("*")
 public class CommentController {
+
 	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
 	@Autowired
@@ -39,24 +45,48 @@ public class CommentController {
 	@Autowired
 	private UserHelper userHelper;
 
+	/**
+	 * Retrieves a comment by its ID.
+	 *
+	 * @param id The ID of the comment to retrieve.
+	 * @return ResponseEntity containing the fetched Comment object.
+	 */
 	@GetMapping(value = "{id}")
 	public ResponseEntity<Comment> viewCommentById(@PathVariable Integer id) {
 		logger.info("Fetching comment by ID: {}", id);
 		return new ResponseEntity<Comment>(commentService.viewComment(id), HttpStatus.OK);
 	}
 
+	/**
+	 * Retrieves all comments associated with a specific user.
+	 *
+	 * @param userId The ID of the user.
+	 * @return ResponseEntity containing a list of Comment objects.
+	 */
 	@GetMapping(value = "/users/{userId}")
 	public ResponseEntity<List<Comment>> viewCommentsByUserId(@PathVariable("userId") Integer userId) {
 		logger.info("Fetching comments by User ID: {}", userId);
 		return new ResponseEntity<List<Comment>>(commentService.viewCommentsByUser(userId), HttpStatus.OK);
 	}
 
+	/**
+	 * Retrieves all comments associated with a specific planter.
+	 *
+	 * @param planterId The ID of the planter.
+	 * @return ResponseEntity containing a list of Comment objects.
+	 */
 	@GetMapping(value = "/planters/{planterId}")
 	public ResponseEntity<List<Comment>> viewCommentsByPlanterId(@PathVariable Integer planterId) {
 		logger.info("Fetching comments by Planter ID: {}", planterId);
 		return new ResponseEntity<List<Comment>>(commentService.viewCommentsOnPlanter(planterId), HttpStatus.OK);
 	}
 
+	/**
+	 * Retrieves recent comments since a specified date.
+	 *
+	 * @param date The date from which to fetch recent comments.
+	 * @return ResponseEntity containing a list of Comment objects.
+	 */
 	@GetMapping(value = "")
 	public ResponseEntity<List<Comment>> viewRecentComments(@RequestParam(required = false) LocalDateTime date) {
 		if (date == null)
@@ -66,14 +96,25 @@ public class CommentController {
 		return new ResponseEntity<List<Comment>>(commentService.viewRecentComments(date), HttpStatus.OK);
 	}
 
+	/**
+	 * Adds a new comment.
+	 *
+	 * @param comment The Comment object to add.
+	 * @return ResponseEntity containing the created Comment object.
+	 */
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "")
 	public ResponseEntity<Comment> addComment(@Valid @RequestBody Comment comment) {
 		logger.info("Adding a new comment");
-
 		return new ResponseEntity<Comment>(commentService.addComment(comment), HttpStatus.CREATED);
 	}
 
+	/**
+	 * Updates an existing comment.
+	 *
+	 * @param comment The updated Comment object.
+	 * @return ResponseEntity containing the updated Comment object.
+	 */
 	@PutMapping(value = "")
 	public ResponseEntity<Comment> updateComment(@Valid @RequestBody Comment comment) {
 		logger.info("Updating comment with ID: {}", comment.getId());
@@ -87,6 +128,12 @@ public class CommentController {
 		return new ResponseEntity<Comment>(commentService.updateComment(comment), HttpStatus.CREATED);
 	}
 
+	/**
+	 * Deletes a comment by its ID.
+	 *
+	 * @param commentId The ID of the comment to delete.
+	 * @return ResponseEntity containing the deleted Comment object.
+	 */
 	@DeleteMapping(value = "{commentId}")
 	public ResponseEntity<Comment> deleteComment(@PathVariable("commentId") Integer commentId) {
 		logger.info("Deleting comment with ID: {}", commentId);

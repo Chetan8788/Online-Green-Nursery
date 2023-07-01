@@ -25,10 +25,16 @@ import com.masai.model.Order;
 import com.masai.service.OrderService;
 import com.masai.service.UserHelper;
 
+/**
+ * The OrderController class handles CRUD operations for orders. It provides
+ * methods for adding a new order, updating an existing order, deleting an
+ * order, and fetching an order by its ID.
+ */
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/orders")
 public class OrderController {
+
 	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
 	@Autowired
@@ -37,6 +43,13 @@ public class OrderController {
 	@Autowired
 	private UserHelper userHelper;
 
+	/**
+	 * Adds a new order.
+	 *
+	 * @param orderReqDto The OrderReqDto object containing the order details.
+	 * @return ResponseEntity containing the created Order object.
+	 * @throws OrderException if there is an error adding the order.
+	 */
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping
 	public ResponseEntity<Order> addOrder(@Valid @RequestBody OrderReqDto orderReqDto) throws OrderException {
@@ -49,6 +62,14 @@ public class OrderController {
 		return new ResponseEntity<>(addedOrder, HttpStatus.OK);
 	}
 
+	/**
+	 * Updates an existing order.
+	 *
+	 * @param updateOrderDto The UpdateOrderDto object containing the updated order
+	 *                       details.
+	 * @return ResponseEntity containing the updated Order object.
+	 * @throws OrderException if there is an error updating the order.
+	 */
 	@PutMapping
 	public ResponseEntity<Order> updateOrder(@Valid @RequestBody UpdateOrderDto updateOrderDto) throws OrderException {
 		logger.info("Updating order");
@@ -64,6 +85,13 @@ public class OrderController {
 		return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
 	}
 
+	/**
+	 * Deletes an order by its ID.
+	 *
+	 * @param orderId The ID of the order to delete.
+	 * @return ResponseEntity containing the deleted Order object.
+	 * @throws OrderException if there is an error deleting the order.
+	 */
 	@DeleteMapping("/{orderId}")
 	public ResponseEntity<Order> deleteOrder(@PathVariable("orderId") Integer orderId) throws OrderException {
 		logger.info("Deleting order");
@@ -77,6 +105,13 @@ public class OrderController {
 		return new ResponseEntity<>(deletedOrder, HttpStatus.OK);
 	}
 
+	/**
+	 * Fetches an order by its ID.
+	 *
+	 * @param orderId The ID of the order to fetch.
+	 * @return ResponseEntity containing the fetched Order object.
+	 * @throws OrderException if there is an error fetching the order.
+	 */
 	@GetMapping("/{orderId}")
 	public ResponseEntity<Order> viewOrder(@PathVariable("orderId") Integer orderId) throws OrderException {
 		logger.info("Fetching order");

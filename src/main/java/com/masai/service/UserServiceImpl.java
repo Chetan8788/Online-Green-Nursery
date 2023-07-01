@@ -29,8 +29,20 @@ public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+	/**
+	 * Registers a new user.
+	 *
+	 * @param user The User object to be registered.
+	 * @return The created User object.
+	 * @throws UserException if the provided user object is null or if there is an
+	 *                       error while registering the user.
+	 */
 	@Override
 	public User registerUser(User user) throws UserException {
+		if (user == null) {
+			throw new UserException("Please provide valid data for the user.");
+		}
+
 		user.setPassword(encoder.encode(user.getPassword()));
 		Role opt = roleRepo.findById("2").orElse(null);
 
@@ -47,6 +59,13 @@ public class UserServiceImpl implements UserService {
 		return createdUser;
 	}
 
+	/**
+	 * Retrieves a user by email.
+	 *
+	 * @param email The email of the user to be retrieved.
+	 * @return The User object with the given email.
+	 * @throws UserException if the user with the given email is not found.
+	 */
 	@Override
 	public User getUserByEmail(String email) throws UserException {
 		User customer = userDao.findByEmail(email);
@@ -56,6 +75,14 @@ public class UserServiceImpl implements UserService {
 		return customer;
 	}
 
+	/**
+	 * Updates an existing user.
+	 *
+	 * @param user The updated User object.
+	 * @return The existing User object before the update.
+	 * @throws UserException if the provided user object is null or if the user with
+	 *                       the given userId is not found.
+	 */
 	@Override
 	public User updateUser(User user) throws UserException {
 		Optional<User> optional = userDao.findById(user.getUserId());
@@ -69,6 +96,14 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Deletes a user.
+	 *
+	 * @param userId The ID of the user to be deleted.
+	 * @return The deleted User object.
+	 * @throws UserException if the user with the given userId is not found or if
+	 *                       there is an error while deleting the user.
+	 */
 	@Override
 	public User deleteUser(Integer userId) throws UserException {
 		Optional<User> optional = userDao.findById(userId);
@@ -82,6 +117,13 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Retrieves a user by ID.
+	 *
+	 * @param userId The ID of the user to be retrieved.
+	 * @return The User object with the given ID.
+	 * @throws UserException if the user with the given userId is not found.
+	 */
 	@Override
 	public User getUserById(Integer userId) throws UserException {
 		Optional<User> optional = userDao.findById(userId);
@@ -93,6 +135,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Retrieves all users.
+	 *
+	 * @return A list of all User objects.
+	 * @throws UserException if there are no users found.
+	 */
 	@Override
 	public List<User> getAllUser() throws UserException {
 		List<User> users = userDao.findAll();

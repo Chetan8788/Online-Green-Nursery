@@ -40,6 +40,17 @@ public class AuthController {
 
 	private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+	/**
+	 * 
+	 * Handles the user login request and generates a JWT token upon successful
+	 * authentication.
+	 * 
+	 * @param request The JwtRequest object containing user credentials (email and
+	 *                password).
+	 * 
+	 * @return ResponseEntity containing JwtResponse object with JWT token and user
+	 *         details upon successful login.
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
 
@@ -51,6 +62,15 @@ public class AuthController {
 		JwtResponse response = JwtResponse.builder().jwtToken(token).userName(userDetails.getUsername()).build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	/**
+	 * 
+	 * Authenticates the user with the provided email and password.
+	 * 
+	 * @param email    The user's email.
+	 * @param password The user's password.
+	 * @throws BadCredentialsException if the provided credentials are invalid.
+	 */
 
 	private void doAuthenticate(String email, String password) {
 
@@ -64,13 +84,19 @@ public class AuthController {
 
 	}
 
+	/**
+	 * 
+	 * Handles the user registration request and creates a new user.
+	 * 
+	 * @param user The User object containing user details.
+	 * @return ResponseEntity containing the created User object upon successful
+	 *         registration.
+	 */
 	@PostMapping("/signup")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
 		User createdUser = userService.registerUser(user);
 		logger.info("User created: {}", createdUser);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
 	}
-
-	
 
 }
