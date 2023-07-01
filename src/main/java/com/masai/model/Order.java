@@ -33,5 +33,5 @@ public class Order {
 	private List<Planter> planters = new ArrayList<>();
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Customer customer;
+	private User customer;
 }

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.masai.dto.OrderReqDto;
 import com.masai.dto.UpdateOrderDto;
 import com.masai.exception.OrderException;
-import com.masai.model.Customer;
+import com.masai.model.User;
 import com.masai.model.Order;
 import com.masai.model.Planter;
-import com.masai.repository.CustomerDao;
+import com.masai.repository.UserDao;
 import com.masai.repository.OrderDao;
 import com.masai.repository.PlanterDao;
 
@@ -25,13 +25,13 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	PlanterDao planterDao;
 	@Autowired
-	CustomerDao customerDao;
+	UserDao customerDao;
 
 	@Override
 	public Order addOrder(OrderReqDto orderReqDto) throws OrderException {
 		Planter planter = planterDao.findById(orderReqDto.getPlanterID())
 				.orElseThrow(() -> new OrderException("Planter not found"));
-		Customer customer = customerDao.findById(orderReqDto.getCustomerId())
+		User customer = customerDao.findById(orderReqDto.getCustomerId())
 				.orElseThrow(() -> new OrderException("Customer not found"));
 		Integer totalStock = planter.getStock();
 		if ((totalStock < orderReqDto.getQuantity()))
@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
 		planterPre.setStock(planterPre.getStock() + orderPre.getQuantity());
 		Planter planter = planterDao.findById(updateOrderDto.getPlanterID())
 				.orElseThrow(() -> new OrderException("Planter not found"));
-		Customer customer = customerDao.findById(updateOrderDto.getCustomerId())
+		User customer = customerDao.findById(updateOrderDto.getCustomerId())
 				.orElseThrow(() -> new OrderException("Customer not found"));
 		Integer totalStock = planter.getStock();
 		if ((totalStock < updateOrderDto.getQuantity()))

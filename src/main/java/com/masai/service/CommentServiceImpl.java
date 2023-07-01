@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.masai.exception.CommentException;
-import com.masai.exception.CustomerException;
+import com.masai.exception.UserException;
 import com.masai.exception.PlanterException;
 import com.masai.model.Comment;
 import com.masai.model.Planter;
 import com.masai.repository.CommentDao;
-import com.masai.repository.CustomerDao;
+import com.masai.repository.UserDao;
 import com.masai.repository.PlanterDao;
 
 @Service
@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	CommentDao commentDao;
 	@Autowired
-	CustomerDao customerDao;
+	UserDao customerDao;
 	@Autowired
 	PlanterDao planterDao;
 
@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<Comment> viewCommentsByCustomer(Integer customerId) throws CommentException, CustomerException {
+	public List<Comment> viewCommentsByCustomer(Integer customerId) throws CommentException, UserException {
 		List<Comment> foundcommentList = commentDao.findByCustomer(customerId);
 		return foundcommentList;
 	}
