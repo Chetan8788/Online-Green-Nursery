@@ -33,25 +33,24 @@ public class PlanterServiceImpl implements PlanterService {
 	}
 
 	@Override
-	public String addSeedsInPlanter(Integer planterId, Integer seedId) throws PlanterException, SeedException {
+	public Planter addSeedsInPlanter(Integer planterId, Integer seedId) throws PlanterException, SeedException {
 		Seed seed = seedDao.findById(seedId).orElseThrow(() -> new SeedException("Seed not found"));
 		Planter planter = planterDao.findById(planterId).orElseThrow(() -> new PlanterException("Planter not found"));
 		planter.getSeeds().add(seed);
 		seed.getPlanters().add(planter);
-		planterDao.save(planter);
-		return "Done...";
+
+		return planterDao.save(planter);
 	}
 
 	@Override
-	public String addPlantInPlanter(Integer planterId, Integer plantId) throws PlanterException, PlantException {
+	public Planter addPlantInPlanter(Integer planterId, Integer plantId) throws PlanterException, PlantException {
 
 		Plant plant = plantDao.findById(plantId).orElseThrow(() -> new PlantException("Plant not found"));
 		Planter planter = planterDao.findById(planterId).orElseThrow(() -> new PlanterException("Planter not found"));
 		planter.getPlants().add(plant);
 		plant.getPlanters().add(planter);
 
-		planterDao.save(planter);
-		return "Done...";
+		return planterDao.save(planter);
 	}
 
 	@Override
