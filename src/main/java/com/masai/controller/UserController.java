@@ -37,21 +37,24 @@ public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("")
 	public ResponseEntity<User> registerUser(@Valid @RequestBody User user) throws UserException {
+		logger.info("Registering a new user: " + user.getEmail());
 		User registeredUser = userService.registerUser(user);
+		logger.info("User registered successfully: " + registeredUser.getEmail());
 		return new ResponseEntity<User>(registeredUser, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/email/{email}")
 	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) throws UserException {
-
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
 
 		if (loggedInEmail.equals(email) || roles.contains("ROLE_ADMIN")) {
-			return new ResponseEntity<User>(userService.getUserByEmail(email), HttpStatus.OK);
+			logger.info("Fetching user by email: " + email);
+			User user = userService.getUserByEmail(email);
+			logger.info("User found: " + user.getEmail());
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 
 		throw new UserException("Unauthorized to access other user details.");
@@ -59,15 +62,17 @@ public class UserController {
 
 	@PutMapping("")
 	public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws UserException {
-
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
 
 		if (loggedInEmail.equals(user.getEmail()) || roles.contains("ROLE_ADMIN")) {
-			return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
+			logger.info("Updating user: " + user.getEmail());
+			User updatedUser = userService.updateUser(user);
+			logger.info("User updated successfully: " + updatedUser.getEmail());
+			return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to access update user.");
+		throw new UserException("Unauthorized to update other user.");
 	}
 
 	@DeleteMapping("/{userId}")
@@ -78,11 +83,13 @@ public class UserController {
 		User user = userService.getUserById(userId);
 
 		if (loggedInEmail.equals(user.getEmail()) || roles.contains("ROLE_ADMIN")) {
-			return new ResponseEntity<User>(userService.deleteUser(userId), HttpStatus.OK);
+			logger.info("Deleting user with user id: " + userId);
+			User deletedUser = userService.deleteUser(userId);
+			logger.info("User deleted successfully: " + deletedUser.getEmail());
+			return new ResponseEntity<User>(deletedUser, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to access delete user with user id : " + userId);
-
+		throw new UserException("Unauthorized to delete user with user id: " + userId);
 	}
 
 	@GetMapping("/{userId}")
@@ -91,24 +98,23 @@ public class UserController {
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
 
-		logger.info("logged in email : " + loggedInEmail);
-		logger.info("logged in roles : " + roles);
+		logger.info("Fetching user by user id: " + userId);
 		user = userService.getUserById(userId);
 
 		if (loggedInEmail.equals(user.getEmail()) || roles.contains("ROLE_ADMIN")) {
+			logger.info("User found: " + user.getEmail());
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to access user with user id : " + userId);
-
+		throw new UserException("Unauthorized to access user with user id: " + userId);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("")
 	public ResponseEntity<List<User>> getAllUser() throws UserException {
+		logger.info("Fetching all users.");
 		List<User> users = userService.getAllUser();
-
+		logger.info("Total users fetched: " + users.size());
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
-
 }

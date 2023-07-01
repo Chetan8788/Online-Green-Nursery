@@ -20,92 +20,87 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private RoleDao roleRepo;
 
 	@Autowired
 	private PasswordEncoder encoder;
-	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
 	public User registerUser(User user) throws UserException {
-
 		user.setPassword(encoder.encode(user.getPassword()));
-	   Role opt=roleRepo.findById("2").get();
-	    
-	    user.getRoles().add(opt);
+		Role opt = roleRepo.findById("2").orElse(null);
+
+		if (opt == null) {
+			throw new UserException("Role not found with ID: 2");
+		}
+
+		user.getRoles().add(opt);
 		User createdUser = userDao.save(user);
+
 		// Log the created user
 		logger.info("User created: {}", createdUser);
-		return createdUser;
 
+		return createdUser;
 	}
 
 	@Override
 	public User getUserByEmail(String email) throws UserException {
 		User customer = userDao.findByEmail(email);
-		if (customer == null)
-			throw new UserException("customer not found with email " + email);
-		else
-			return customer;
+		if (customer == null) {
+			throw new UserException("Customer not found with email: " + email);
+		}
+		return customer;
 	}
 
 	@Override
 	public User updateUser(User user) throws UserException {
-
 		Optional<User> optional = userDao.findById(user.getUserId());
+
 		if (optional.isPresent()) {
 			User existingUser = optional.get();
-
 			userDao.save(user);
-
 			return existingUser;
-		} else
-			throw new UserException("Customer not exist with customer Id : " + user.getUserId());
-
+		} else {
+			throw new UserException("Customer does not exist with customer ID: " + user.getUserId());
+		}
 	}
 
 	@Override
 	public User deleteUser(Integer userId) throws UserException {
-
 		Optional<User> optional = userDao.findById(userId);
 
 		if (optional.isPresent()) {
 			User existingUser = optional.get();
-
 			userDao.deleteById(userId);
-
 			return existingUser;
-		} else
-			throw new UserException("Customer not exist with customer Id : " + userId);
-
+		} else {
+			throw new UserException("Customer does not exist with customer ID: " + userId);
+		}
 	}
 
 	@Override
 	public User getUserById(Integer userId) throws UserException {
-
 		Optional<User> optional = userDao.findById(userId);
 
 		if (optional.isPresent()) {
-
 			return optional.get();
-
-		} else
-			throw new UserException("Customer not exist with customer Id : " + userId);
-
+		} else {
+			throw new UserException("Customer does not exist with customer ID: " + userId);
+		}
 	}
 
 	@Override
 	public List<User> getAllUser() throws UserException {
-
 		List<User> users = userDao.findAll();
 
 		if (!users.isEmpty()) {
 			return users;
-		} else
-			throw new UserException(" Customer Not Found !");
-
+		} else {
+			throw new UserException("No customers found.");
+		}
 	}
-
 }
