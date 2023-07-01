@@ -48,39 +48,40 @@ public class UserController {
 	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) throws UserException {
 
 		String loggedInEmail = userHelper.getLoggedInEmail();
+		List<String> roles = userHelper.getLoggedInUserRoles();
 
-		if (!email.equals(loggedInEmail))
-			throw new UserException("Unauthorized to access other user details.");
+		if (loggedInEmail.equals(email) || roles.contains("ROLE_ADMIN")) {
+			return new ResponseEntity<User>(userService.getUserByEmail(email), HttpStatus.OK);
+		}
 
-		User user = userService.getUserByEmail(email);
-
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		throw new UserException("Unauthorized to access other user details.");
 	}
 
 	@PutMapping("")
 	public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws UserException {
 
 		String loggedInEmail = userHelper.getLoggedInEmail();
+		List<String> roles = userHelper.getLoggedInUserRoles();
 
-		if (!loggedInEmail.equals(user.getEmail()))
-			throw new UserException("Unauthorized to access update user.");
+		if (loggedInEmail.equals(user.getEmail()) || roles.contains("ROLE_ADMIN")) {
+			return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
+		}
 
-		User existingUser = userService.updateUser(user);
-		return new ResponseEntity<User>(existingUser, HttpStatus.OK);
+		throw new UserException("Unauthorized to access update user.");
 	}
 
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<User> deleteUser(@PathVariable("userId") Integer userId) throws UserException {
 		String loggedInEmail = userHelper.getLoggedInEmail();
+		List<String> roles = userHelper.getLoggedInUserRoles();
 
 		User user = userService.getUserById(userId);
 
-		if (!loggedInEmail.equals(user.getEmail()))
-			throw new UserException("Unauthorized to access delete user with user id : " + userId);
+		if (loggedInEmail.equals(user.getEmail()) || roles.contains("ROLE_ADMIN")) {
+			return new ResponseEntity<User>(userService.deleteUser(userId), HttpStatus.OK);
+		}
 
-		User duser = userService.deleteUser(userId);
-
-		return new ResponseEntity<User>(duser, HttpStatus.OK);
+		throw new UserException("Unauthorized to access delete user with user id : " + userId);
 
 	}
 
@@ -88,14 +89,18 @@ public class UserController {
 	public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId) throws UserException {
 		User user = null;
 		String loggedInEmail = userHelper.getLoggedInEmail();
+		List<String> roles = userHelper.getLoggedInUserRoles();
 
 		logger.info("logged in email : " + loggedInEmail);
+		logger.info("logged in roles : " + roles);
 		user = userService.getUserById(userId);
 
-		if (!loggedInEmail.equals(user.getEmail()))
-			throw new UserException("Unauthorized to access user with user id : " + userId);
+		if (loggedInEmail.equals(user.getEmail()) || roles.contains("ROLE_ADMIN")) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		}
 
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		throw new UserException("Unauthorized to access user with user id : " + userId);
+
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
