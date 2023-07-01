@@ -9,7 +9,7 @@ import com.masai.model.Order;
 
 public interface OrderService {
 
-	public Order addOrder(OrderReqDto orderReqDto) throws OrderException;
+	public Order addOrder(OrderReqDto orderReqDto,Integer userId) throws OrderException;
 
 	public Order updateOrder(UpdateOrderDto updateOrderDto) throws OrderException;
 
