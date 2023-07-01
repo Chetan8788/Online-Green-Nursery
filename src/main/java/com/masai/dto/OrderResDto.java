@@ -12,5 +12,5 @@ public class OrderResDto {
 	private Double totalCost;
 	private String transactionMode;
 	private Integer PlanterID;
-	private Integer customerId;
+	private Integer userId;
 }

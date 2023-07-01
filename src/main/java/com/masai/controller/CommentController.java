@@ -31,7 +31,7 @@ public class CommentController {
 	@Autowired
 	CommentService commentService;
 	@Autowired
-	UserService customerService;
+	UserService userService;
 	@Autowired
 	PlanterService planterService;
 
@@ -41,10 +41,10 @@ public class CommentController {
 		return new ResponseEntity<Comment>(commentService.viewComment(id), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/customers/{customerId}")
-	public ResponseEntity<List<Comment>> viewCommentsByCustomer(@PathVariable Integer customerId) {
+	@GetMapping(value = "/users/{userId}")
+	public ResponseEntity<List<Comment>> viewCommentsByCustomer(@PathVariable("userId") Integer userId) {
 
-		return new ResponseEntity<List<Comment>>(commentService.viewCommentsByCustomer(customerId), HttpStatus.OK);
+		return new ResponseEntity<List<Comment>>(commentService.viewCommentsByUser(userId), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/planters/{planterId}")

@@ -68,8 +68,8 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<Comment> viewCommentsByCustomer(Integer customerId) throws CommentException, UserException {
-		List<Comment> foundcommentList = commentDao.findByCustomer(customerId);
+	public List<Comment> viewCommentsByUser(Integer userId) throws CommentException, UserException {
+		List<Comment> foundcommentList = commentDao.findByUser(userId);
 		return foundcommentList;
 	}
 

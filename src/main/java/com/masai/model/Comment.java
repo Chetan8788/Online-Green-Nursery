@@ -29,6 +29,6 @@ public class Comment {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Planter planter;
 	@ManyToOne(cascade = CascadeType.ALL)
-	private User customer;
+	private User user;
 
 }

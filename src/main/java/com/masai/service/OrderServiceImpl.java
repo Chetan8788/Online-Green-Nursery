@@ -25,26 +25,26 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	PlanterDao planterDao;
 	@Autowired
-	UserDao customerDao;
+	UserDao userDao;
 
 	@Override
 	public Order addOrder(OrderReqDto orderReqDto) throws OrderException {
 		Planter planter = planterDao.findById(orderReqDto.getPlanterID())
 				.orElseThrow(() -> new OrderException("Planter not found"));
-		User customer = customerDao.findById(orderReqDto.getCustomerId())
-				.orElseThrow(() -> new OrderException("Customer not found"));
+		User user = userDao.findById(orderReqDto.getUserId())
+				.orElseThrow(() -> new OrderException("User not found"));
 		Integer totalStock = planter.getStock();
 		if ((totalStock < orderReqDto.getQuantity()))
 			throw new OrderException("There is no enough stock");
 		planter.setStock(totalStock - orderReqDto.getQuantity());
 		Order order = new Order();
-		order.setCustomer(customer);
+		order.setUser(user);
 		order.setOrderDate(LocalDateTime.now());
 		order.getPlanters().add(planter);
 		order.setTransactionMode(orderReqDto.getTransactionMode());
 		order.setQuantity(orderReqDto.getQuantity());
 		order.setTotalCost(orderReqDto.getQuantity() * planter.getCost());
-		customer.getOrders().add(order);
+		user.getOrders().add(order);
 		return orderDao.save(order);
 
 	}
@@ -57,15 +57,15 @@ public class OrderServiceImpl implements OrderService {
 		planterPre.setStock(planterPre.getStock() + orderPre.getQuantity());
 		Planter planter = planterDao.findById(updateOrderDto.getPlanterID())
 				.orElseThrow(() -> new OrderException("Planter not found"));
-		User customer = customerDao.findById(updateOrderDto.getCustomerId())
-				.orElseThrow(() -> new OrderException("Customer not found"));
+		User customer = userDao.findById(updateOrderDto.getUserId())
+				.orElseThrow(() -> new OrderException("User not found"));
 		Integer totalStock = planter.getStock();
 		if ((totalStock < updateOrderDto.getQuantity()))
 			throw new OrderException("There is no enough stock");
 		planter.setStock(totalStock - updateOrderDto.getQuantity());
 		Order order = new Order();
 		order.setOrderId(updateOrderDto.getOrderId());
-		order.setCustomer(customer);
+		order.setUser(customer);
 		order.setOrderDate(LocalDateTime.now());
 		order.getPlanters().add(planter);
 		order.setTransactionMode(updateOrderDto.getTransactionMode());

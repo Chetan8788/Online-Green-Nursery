@@ -62,7 +62,7 @@ public class User implements UserDetails {
 	@Embedded
 	private Address address;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Order> orders = new HashSet<Order>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

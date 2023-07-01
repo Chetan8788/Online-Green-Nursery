@@ -17,7 +17,7 @@ public interface CommentService {
 
 	Comment updateComment(Comment comment) throws CommentException;
 
-	List<Comment> viewCommentsByCustomer(Integer customerId) throws CommentException, UserException;
+	List<Comment> viewCommentsByUser(Integer userId) throws CommentException, UserException;
 
 	List<Comment> viewCommentsOnPlanter(Integer planterId) throws CommentException, PlanterException;
 
