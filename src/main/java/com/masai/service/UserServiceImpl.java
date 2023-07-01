@@ -3,9 +3,14 @@ package com.masai.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.masai.model.Role;
+import com.masai.service.UserServiceImpl;
 import com.masai.exception.UserException;
 import com.masai.model.User;
 import com.masai.repository.UserDao;
@@ -16,15 +21,20 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 
+	@Autowired
+	private PasswordEncoder encoder;
+	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 	@Override
 	public User registerUser(User user) throws UserException {
 
-//		Set<Order> orders=customer.getOrders() ;
-//		for(Order o:orders) {
-//			o.setCustomer(customer);
-//		}
+		user.setPassword(encoder.encode(user.getPassword()));
+		user.getRoles().add(new Role("2", "ROLE_USER"));
+		User createdUser = userDao.save(user);
+		// Log the created user
+		logger.info("User created: {}", createdUser);
+		return createdUser;
 
-		return userDao.save(user);
 	}
 
 	@Override

@@ -48,15 +48,13 @@ public class User implements UserDetails {
 	@Size(max = 15, min = 4, message = "username should be of max 15 and min 4 characrter")
 	private String name;
 
-	@Email(message = "Invalid formate of email")
-	@Column(unique = true)
+	@Email(message = "Invalid email format")
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Size(max = 15, min = 4, message = "username should be of max 15 and min 4 characrter")
 	private String username;
 
-//	@Min(value = 6)
-	@JsonIgnore
 	private String password;
 
 	@Embedded
@@ -91,7 +89,7 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities = this.roles.stream()
-				.map((role) -> new SimpleGrantedAuthority(role.getRollName())).toList();
+				.map((role) -> new SimpleGrantedAuthority(role.getRoleName())).toList();
 		return authorities;
 	}
 
