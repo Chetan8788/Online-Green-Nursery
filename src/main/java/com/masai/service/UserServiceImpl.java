@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.masai.model.Role;
-import com.masai.service.UserServiceImpl;
 import com.masai.exception.UserException;
+import com.masai.model.Role;
 import com.masai.model.User;
+import com.masai.repository.RoleDao;
 import com.masai.repository.UserDao;
 
 @Service
@@ -20,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private RoleDao roleRepo;
 
 	@Autowired
 	private PasswordEncoder encoder;
@@ -29,7 +32,9 @@ public class UserServiceImpl implements UserService {
 	public User registerUser(User user) throws UserException {
 
 		user.setPassword(encoder.encode(user.getPassword()));
-		user.getRoles().add(new Role("2", "ROLE_USER"));
+	   Role opt=roleRepo.findById("2").get();
+	    
+	    user.getRoles().add(opt);
 		User createdUser = userDao.save(user);
 		// Log the created user
 		logger.info("User created: {}", createdUser);

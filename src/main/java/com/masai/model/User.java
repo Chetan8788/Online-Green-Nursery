@@ -63,7 +63,7 @@ public class User implements UserDetails {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Order> orders = new HashSet<Order>();
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "users", referencedColumnName = "userId"), inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "roleId"))
 	private Set<Role> roles = new HashSet<>();
 
@@ -92,6 +92,11 @@ public class User implements UserDetails {
 				.map((role) -> new SimpleGrantedAuthority(role.getRoleName())).toList();
 		return authorities;
 	}
+	
+	 @Override
+	    public String getUsername() {
+	        return this.email;
+	    }
 
 	@Override
 	public boolean isAccountNonExpired() {
