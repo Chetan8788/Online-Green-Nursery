@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.exception.SeedException;
@@ -25,6 +26,7 @@ import com.masai.service.SeedService;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/seeds")
 public class SeedController {
 	private static final Logger logger = LoggerFactory.getLogger(SeedController.class);
 
@@ -32,7 +34,7 @@ public class SeedController {
 	private SeedService seedService;
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/seeds")
+	@PostMapping
 	public ResponseEntity<Seed> addSeed(@Valid @RequestBody Seed seed) throws SeedException {
 		logger.info("Adding a new seed: {}", seed);
 		Seed registeredSeed = seedService.addSeed(seed);
@@ -41,7 +43,7 @@ public class SeedController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping("/seeds")
+	@PutMapping
 	public ResponseEntity<Seed> updateSeed(@Valid @RequestBody Seed seed) throws SeedException {
 		logger.info("Updating seed: {}", seed);
 		Seed updatedSeed = seedService.updateSeed(seed);
@@ -50,23 +52,23 @@ public class SeedController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/seeds/{seedId}")
-	public ResponseEntity<Seed> deleteSeed(@PathVariable Integer seedId) throws SeedException {
+	@DeleteMapping("/{seedId}")
+	public ResponseEntity<Seed> deleteSeed(@PathVariable("seedId") Integer seedId) throws SeedException {
 		logger.info("Deleting seed with ID: {}", seedId);
 		Seed deletedSeed = seedService.deleteSeed(seedId);
 		logger.info("Seed deleted successfully: {}", deletedSeed);
 		return new ResponseEntity<>(deletedSeed, HttpStatus.OK);
 	}
 
-	@GetMapping("/seeds/{seedId}")
-	public ResponseEntity<Seed> viewSeed(@PathVariable Integer seedId) throws SeedException {
+	@GetMapping("/{seedId}")
+	public ResponseEntity<Seed> viewSeedById(@PathVariable Integer seedId) throws SeedException {
 		logger.info("Fetching seed with ID: {}", seedId);
 		Seed seed = seedService.viewSeed(seedId);
 		logger.info("Seed fetched successfully: {}", seed);
 		return new ResponseEntity<>(seed, HttpStatus.OK);
 	}
 
-	@GetMapping("/getseeds/{commonName}")
+	@GetMapping("/name/{commonName}")
 	public ResponseEntity<Seed> viewSeedByCommonName(@PathVariable("commonName") String commonName)
 			throws SeedException {
 		logger.info("Fetching seed with common name: {}", commonName);
@@ -83,7 +85,7 @@ public class SeedController {
 		return new ResponseEntity<>(seeds, HttpStatus.OK);
 	}
 
-	@GetMapping("/getSeedsByType/{typeOfSeed}")
+	@GetMapping("/type/{typeOfSeed}")
 	public ResponseEntity<List<Seed>> viewAllSeedsByType(@PathVariable("typeOfSeed") String typeOfSeed)
 			throws SeedException {
 		logger.info("Fetching seeds by type: {}", typeOfSeed);

@@ -33,7 +33,7 @@ public class PlantController {
 	private PlantService plantService;
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping(value = "")
+	@PostMapping
 	public ResponseEntity<Plant> addPlant(@Valid @RequestBody Plant plant) {
 		logger.info("Adding a new plant: {}", plant);
 		Plant addedPlant = plantService.addPlant(plant);
@@ -42,7 +42,7 @@ public class PlantController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping(value = "")
+	@PutMapping
 	public ResponseEntity<Plant> updatePlant(@Valid @RequestBody Plant plant) {
 		logger.info("Updating plant: {}", plant);
 		Plant updatedPlant = plantService.updatePlant(plant);
@@ -51,23 +51,23 @@ public class PlantController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Plant> deletePlant(@PathVariable Integer id) {
-		logger.info("Deleting plant with ID: {}", id);
-		Plant deletedPlant = plantService.deletePlant(id);
+	@DeleteMapping("/{plantId}")
+	public ResponseEntity<Plant> deletePlant(@PathVariable("plantId") Integer plantId) {
+		logger.info("Deleting plant with ID: {}", plantId);
+		Plant deletedPlant = plantService.deletePlant(plantId);
 		logger.info("Plant deleted: {}", deletedPlant);
 		return new ResponseEntity<>(deletedPlant, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Plant> viewPlant(@PathVariable Integer id) {
-		logger.info("Viewing plant with ID: {}", id);
-		Plant plant = plantService.viewPlant(id);
+	@GetMapping(value = "/{plantId}")
+	public ResponseEntity<Plant> viewPlant(@PathVariable("plantId") Integer plantId) {
+		logger.info("Viewing plant with ID: {}", plantId);
+		Plant plant = plantService.viewPlant(plantId);
 		logger.info("Plant retrieved: {}", plant);
 		return new ResponseEntity<>(plant, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "by_name/{commonName}")
+	@GetMapping(value = "name/{commonName}")
 	public ResponseEntity<Plant> viewPlantByName(@PathVariable String commonName) {
 		logger.info("Viewing plant with common name: {}", commonName);
 		Plant plant = plantService.viewPlant(commonName);
@@ -75,7 +75,7 @@ public class PlantController {
 		return new ResponseEntity<>(plant, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "")
+	@GetMapping
 	public ResponseEntity<List<Plant>> viewAllPlants() {
 		logger.info("Viewing all plants");
 		List<Plant> plants = plantService.viewAllPlants();
@@ -83,7 +83,7 @@ public class PlantController {
 		return new ResponseEntity<>(plants, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/by_type/{typeOfPlant}")
+	@GetMapping(value = "/type/{typeOfPlant}")
 	public ResponseEntity<List<Plant>> viewAllPlantsByType(@PathVariable String typeOfPlant) {
 		logger.info("Viewing plants of type: {}", typeOfPlant);
 		List<Plant> plants = plantService.viewAllPlants(typeOfPlant);

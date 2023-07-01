@@ -38,7 +38,7 @@ public class OrderController {
 	private UserHelper userHelper;
 
 	@PreAuthorize("hasRole('USER')")
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<Order> addOrder(@Valid @RequestBody OrderReqDto orderReqDto) throws OrderException {
 		logger.info("Adding new order");
 
@@ -49,7 +49,7 @@ public class OrderController {
 		return new ResponseEntity<>(addedOrder, HttpStatus.OK);
 	}
 
-	@PutMapping("")
+	@PutMapping
 	public ResponseEntity<Order> updateOrder(@Valid @RequestBody UpdateOrderDto updateOrderDto) throws OrderException {
 		logger.info("Updating order");
 
@@ -68,7 +68,7 @@ public class OrderController {
 	public ResponseEntity<Order> deleteOrder(@PathVariable("orderId") Integer orderId) throws OrderException {
 		logger.info("Deleting order");
 
-		if (userHelper.getLoggedInUserId().equals(orderService.viewOrder(orderId).getUser().getUserId()))
+		if (!userHelper.getLoggedInUserId().equals(orderService.viewOrder(orderId).getUser().getUserId()))
 			throw new OrderException("You can't delete orders with others' ID");
 
 		Order deletedOrder = orderService.deleteOrder(orderId);
@@ -81,7 +81,7 @@ public class OrderController {
 	public ResponseEntity<Order> viewOrder(@PathVariable("orderId") Integer orderId) throws OrderException {
 		logger.info("Fetching order");
 
-		if (userHelper.getLoggedInUserId().equals(orderService.viewOrder(orderId).getUser().getUserId()))
+		if (!userHelper.getLoggedInUserId().equals(orderService.viewOrder(orderId).getUser().getUserId()))
 			throw new OrderException("You can't view orders with others' ID");
 
 		Order order = orderService.viewOrder(orderId);
