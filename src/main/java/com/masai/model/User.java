@@ -69,7 +69,7 @@ public class User implements UserDetails {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, email, name, password, username);
+		return Objects.hash(email, name, password);
 	}
 
 	@Override
@@ -81,9 +81,9 @@ public class User implements UserDetails {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(address, other.address) && Objects.equals(email, other.email)
-				&& Objects.equals(name, other.name) && Objects.equals(password, other.password)
-				&& Objects.equals(username, other.username);
+		return Objects.equals(email, other.email) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password);
+
 	}
 
 	@Override
@@ -121,6 +121,16 @@ public class User implements UserDetails {
 	public User(@Size(max = 15, min = 4, message = "username should be of max 15 and min 4 characrter") String name,
 			@Email(message = "Invalid email format") String email, String password) {
 		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
+
+	public User(Integer userId,
+			@Size(max = 15, min = 4, message = "username should be of max 15 and min 4 characrter") String name,
+			@Email(message = "Invalid email format") String email, String password) {
+		super();
+		this.userId = userId;
 		this.name = name;
 		this.email = email;
 		this.password = password;
