@@ -27,6 +27,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -62,8 +65,8 @@ public class User implements UserDetails {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Order> orders = new HashSet<Order>();
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "users", referencedColumnName = "userId"), inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "roleId"))
 	private Set<Role> roles = new HashSet<>();
 

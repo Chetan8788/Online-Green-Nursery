@@ -14,6 +14,18 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(UnauthorizedException orderException,
+			WebRequest webRequest) {
+
+		MyErrorDetails error = new MyErrorDetails();
+		error.setTimestamp(LocalDateTime.now());
+		error.setMessage(orderException.getMessage());
+		error.setDetails(webRequest.getDescription(false));
+
+		return new ResponseEntity<MyErrorDetails>(error, HttpStatus.UNAUTHORIZED);
+	}
+
 	@ExceptionHandler(OrderException.class)
 	public ResponseEntity<MyErrorDetails> CustomerExceptionHandler(OrderException orderException,
 			WebRequest webRequest) {
