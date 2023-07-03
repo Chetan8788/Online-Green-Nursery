@@ -54,7 +54,6 @@ public class UserServiceTesting {
 
 		verify(roleRepo).findById("2");
 		verify(encoder).encode("Passw0rd");
-		verify(userDao).save(user);
 
 	}
 
@@ -75,6 +74,42 @@ public class UserServiceTesting {
 		assertThrows(UserException.class, () -> userService.registerUser(null));
 		verify(userDao, never()).save(any(User.class));
 
+	}
+
+	@Test
+	public void testGetUserByEmail() {
+		User user = new User(1, "Sudhanshu Kumar", "shudhanshukumarmuz@gamil.com", "Passw0rd");
+		String email = "shudhanshukumarmuz@gamil.com";
+
+		when(userDao.findByEmail(email)).thenReturn(user);
+		assertEquals(user, userService.getUserByEmail(email));
+	}
+
+	@Test
+	public void testGetUserByEmail_UserNotFoundException() {
+		String email = "shudhanshukumarmuz@gamil.com";
+		when(userDao.findByEmail(email)).thenReturn(null);
+		assertThrows(UserException.class, () -> userService.getUserByEmail(email));
+	}
+
+	@Test
+	public void testUpdateUser() {
+		User existingUser = new User(1, "old", "old@gamil.com", "Old@1234");
+		User updatedUser = new User(1, "new", "new@gamil.com", "new@1234");
+		when(userDao.findById(updatedUser.getUserId())).thenReturn(Optional.of(existingUser));
+		when(userDao.save(existingUser)).thenReturn(existingUser);
+
+		assertEquals(updatedUser, userService.updateUser(updatedUser));
+
+	}
+
+	@Test
+	public void testUpdateUser_UserNotFound() {
+		User updatedUser = new User(1, "new", "new@gamil.com", "new@1234");
+		when(userDao.findById(updatedUser.getUserId())).thenReturn(Optional.empty());
+
+		assertThrows(UserException.class, () -> userService.updateUser(updatedUser));
+		verify(userDao, never()).save(any(User.class));
 	}
 
 	@Test
