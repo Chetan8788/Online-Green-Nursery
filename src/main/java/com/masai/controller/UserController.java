@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.masai.exception.UnauthorizedException;
 import com.masai.exception.UserException;
 import com.masai.model.User;
 import com.masai.service.UserHelper;
@@ -63,11 +64,13 @@ public class UserController {
 	 *
 	 * @param email The email of the user to fetch.
 	 * @return ResponseEntity containing the retrieved User object.
-	 * @throws UserException if there is an error while fetching the user or if the
-	 *                       logged-in user is not authorized.
+	 * @throws UserException         if there is an error while fetching the user
+	 * 
+	 * @throws UnauthorizedException if the logged-in user is not authorized.
 	 */
 	@GetMapping("/email/{email}")
-	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) throws UserException {
+	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email)
+			throws UserException, UnauthorizedException {
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
 
@@ -78,7 +81,7 @@ public class UserController {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to access other user details.");
+		throw new UnauthorizedException("Unauthorized to access other user details.");
 	}
 
 	/**
@@ -86,11 +89,12 @@ public class UserController {
 	 *
 	 * @param user The User object containing the updated user details.
 	 * @return ResponseEntity containing the updated User object.
-	 * @throws UserException if there is an error while updating the user or if the
-	 *                       logged-in user is not authorized.
+	 * @throws UserException         if there is an error while updating the user
+	 * @throws UnauthorizedException if the logged-in user is not authorized.
+	 * 
 	 */
 	@PutMapping("")
-	public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws UserException {
+	public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws UnauthorizedException {
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
 
@@ -101,7 +105,7 @@ public class UserController {
 			return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to update other user.");
+		throw new UnauthorizedException("Unauthorized to update other user.");
 	}
 
 	/**
@@ -109,11 +113,12 @@ public class UserController {
 	 *
 	 * @param userId The ID of the user to delete.
 	 * @return ResponseEntity containing the deleted User object.
-	 * @throws UserException if there is an error while deleting the user or if the
-	 *                       logged-in user is not authorized.
+	 * @throws UnauthorizedException if the logged-in user is not authorized.
+	 * 
+	 * @throws UserException         if there is an error while deleting the user
 	 */
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<User> deleteUser(@PathVariable("userId") Integer userId) throws UserException {
+	public ResponseEntity<User> deleteUser(@PathVariable("userId") Integer userId) throws UnauthorizedException {
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
 
@@ -126,7 +131,7 @@ public class UserController {
 			return new ResponseEntity<User>(deletedUser, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to delete user with user id: " + userId);
+		throw new UnauthorizedException("Unauthorized to delete user with user id: " + userId);
 	}
 
 	/**
@@ -134,11 +139,12 @@ public class UserController {
 	 *
 	 * @param userId The ID of the user to fetch.
 	 * @return ResponseEntity containing the retrieved User object.
-	 * @throws UserException if there is an error while fetching the user or if the
-	 *                       logged-in user is not authorized.
+	 * @throws UserException         if there is an error while fetching the user or
+	 * 
+	 * @throws UnauthorizedException if the logged-in user is not authorized.
 	 */
 	@GetMapping("/{userId}")
-	public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId) throws UserException {
+	public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId) throws UnauthorizedException {
 		User user = null;
 		String loggedInEmail = userHelper.getLoggedInEmail();
 		List<String> roles = userHelper.getLoggedInUserRoles();
@@ -151,7 +157,7 @@ public class UserController {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 
-		throw new UserException("Unauthorized to access user with user id: " + userId);
+		throw new UnauthorizedException("Unauthorized to access user with user id: " + userId);
 	}
 
 	/**
