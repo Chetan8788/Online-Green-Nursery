@@ -63,13 +63,13 @@ public class User implements UserDetails {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Order> orders = new HashSet<Order>();
 
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "users", referencedColumnName = "userId"), inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "roleId"))
 	private Set<Role> roles = new HashSet<>();
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, email, name, password, username);
+		return Objects.hash(email, name, password);
 	}
 
 	@Override
@@ -81,9 +81,9 @@ public class User implements UserDetails {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(address, other.address) && Objects.equals(email, other.email)
-				&& Objects.equals(name, other.name) && Objects.equals(password, other.password)
-				&& Objects.equals(username, other.username);
+		return Objects.equals(email, other.email) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password);
+
 	}
 
 	@Override
@@ -92,11 +92,11 @@ public class User implements UserDetails {
 				.map((role) -> new SimpleGrantedAuthority(role.getRoleName())).toList();
 		return authorities;
 	}
-	
-	 @Override
-	    public String getUsername() {
-	        return this.email;
-	    }
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -116,6 +116,24 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public User(@Size(max = 15, min = 4, message = "username should be of max 15 and min 4 characrter") String name,
+			@Email(message = "Invalid email format") String email, String password) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
+
+	public User(Integer userId,
+			@Size(max = 15, min = 4, message = "username should be of max 15 and min 4 characrter") String name,
+			@Email(message = "Invalid email format") String email, String password) {
+		super();
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.password = password;
 	}
 
 }

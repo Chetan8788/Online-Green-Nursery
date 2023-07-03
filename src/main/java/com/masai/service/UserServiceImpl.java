@@ -44,13 +44,10 @@ public class UserServiceImpl implements UserService {
 		}
 
 		user.setPassword(encoder.encode(user.getPassword()));
-		Role opt = roleRepo.findById("2").orElse(null);
 
-		if (opt == null) {
-			throw new UserException("Role not found with ID: 2");
-		}
+		Role role = roleRepo.findById("2").orElseThrow(() -> new UserException("Role not found with ID: 2"));
 
-		user.getRoles().add(opt);
+		user.getRoles().add(role);
 		User createdUser = userDao.save(user);
 
 		// Log the created user
@@ -85,15 +82,14 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public User updateUser(User user) throws UserException {
-		Optional<User> optional = userDao.findById(user.getUserId());
+		User existingUser = userDao.findById(user.getUserId())
+				.orElseThrow(() -> new UserException("Customer does not exist with customer ID: " + user.getUserId()));
 
-		if (optional.isPresent()) {
-			User existingUser = optional.get();
-			userDao.save(user);
-			return existingUser;
-		} else {
-			throw new UserException("Customer does not exist with customer ID: " + user.getUserId());
-		}
+		existingUser.setName(user.getName());
+		existingUser.setEmail(user.getEmail());
+		existingUser.setPassword(user.getPassword());
+
+		return userDao.save(existingUser);
 	}
 
 	/**
