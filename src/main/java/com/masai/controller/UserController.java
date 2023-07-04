@@ -50,6 +50,7 @@ public class UserController {
 	 * @return ResponseEntity containing the created User object.
 	 * @throws UserException if there is an error while registering the user.
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("")
 	public ResponseEntity<User> registerUser(@Valid @RequestBody User user) throws UserException {
 		logger.info("Registering a new user: " + user.getEmail());
@@ -89,6 +90,7 @@ public class UserController {
 	 * @throws UserException if there is an error while updating the user or if the
 	 *                       logged-in user is not authorized.
 	 */
+
 	@PutMapping("")
 	public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws UserException {
 		String loggedInEmail = userHelper.getLoggedInEmail();
