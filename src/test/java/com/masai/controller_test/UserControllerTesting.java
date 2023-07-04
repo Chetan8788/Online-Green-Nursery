@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,9 +59,13 @@ public class UserControllerTesting {
 	@Test
 	@WithMockUser(roles = "ADMIN")
 	public void testRegisterUser() throws Exception {
+
 		User user = new User("Sudhanshu", "shu@gamil.com", "Passw0rd");
+
 		when(userService.registerUser(user)).thenReturn(user);
+
 		String jsonBody = new ObjectMapper().writeValueAsString(user);
+
 		MvcResult result = mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(jsonBody))
 				.andExpect(status().isCreated()).andReturn();
 
@@ -78,6 +81,7 @@ public class UserControllerTesting {
 	public void testGetUserByEmail() throws Exception {
 		User user = new User(1, "Sudhanshu Kumar", "shudhanshukumarmuz@gamil.com", "Passw0rd");
 		String email = "shudhanshukumarmuz@gamil.com";
+
 		when(userHelper.getLoggedInEmail()).thenReturn(email);
 		when(userHelper.getLoggedInUserRoles()).thenReturn(Arrays.asList("ROLE_ADMIN"));
 		when(userService.getUserByEmail(email)).thenReturn(user);
@@ -143,9 +147,11 @@ public class UserControllerTesting {
 		User user = new User("Sudhanshu Kumar", "shudhanshukumarmuz@gamil.com", "Passw0rd");
 		List<String> roles = Arrays.asList("ROLE_ADMIN");
 		Integer userId = 1;
+
 		when(userHelper.getLoggedInEmail()).thenReturn("shudhanshukumarmuz@gamil.com");
 		when(userHelper.getLoggedInUserRoles()).thenReturn(roles);
 		when(userService.getUserById(userId)).thenReturn(user);
+
 		MvcResult result = mockMvc.perform(get("/users/{userId}", userId)).andExpect(status().isOk()).andReturn();
 		String responseBody = result.getResponse().getContentAsString();
 
