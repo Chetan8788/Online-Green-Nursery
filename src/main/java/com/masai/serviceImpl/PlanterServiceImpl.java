@@ -1,4 +1,4 @@
-package com.masai.service;
+package com.masai.serviceImpl;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import com.masai.model.Seed;
 import com.masai.repository.PlantDao;
 import com.masai.repository.PlanterDao;
 import com.masai.repository.SeedDao;
+import com.masai.service.PlanterService;
 
 @Service
 public class PlanterServiceImpl implements PlanterService {

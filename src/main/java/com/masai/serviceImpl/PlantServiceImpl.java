@@ -1,5 +1,5 @@
 
-package com.masai.service;
+package com.masai.serviceImpl;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.masai.exception.PlantException;
 import com.masai.model.Plant;
 import com.masai.repository.PlantDao;
+import com.masai.service.PlantService;
 
 @Service
 public class PlantServiceImpl implements PlantService {

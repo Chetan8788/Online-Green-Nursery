@@ -1,4 +1,4 @@
-package com.masai.service;
+package com.masai.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.UserException;
 import com.masai.model.User;
+import com.masai.service.UserService;
 
 @Service
 public class CustomeUserDetailService implements UserDetailsService {
