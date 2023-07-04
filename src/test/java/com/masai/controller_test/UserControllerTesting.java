@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masai.controller.UserController;
 import com.masai.model.User;
 import com.masai.service.UserHelper;
-import com.masai.service.UserServiceImpl;
+import com.masai.serviceImpl.UserServiceImpl;
 
 @AutoConfigureMockMvc
 @ContextConfiguration

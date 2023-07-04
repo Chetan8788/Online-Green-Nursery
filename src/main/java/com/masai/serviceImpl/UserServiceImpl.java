@@ -1,4 +1,4 @@
-package com.masai.service;
+package com.masai.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,7 @@ import com.masai.model.Role;
 import com.masai.model.User;
 import com.masai.repository.RoleDao;
 import com.masai.repository.UserDao;
+import com.masai.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {

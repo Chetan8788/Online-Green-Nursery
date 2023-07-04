@@ -25,7 +25,7 @@ import com.masai.model.Role;
 import com.masai.model.User;
 import com.masai.repository.RoleDao;
 import com.masai.repository.UserDao;
-import com.masai.service.UserServiceImpl;
+import com.masai.serviceImpl.UserServiceImpl;
 
 @SpringBootTest(classes = { UserServiceTesting.class })
 @TestMethodOrder(OrderAnnotation.class)

@@ -1,4 +1,4 @@
-package com.masai.service;
+package com.masai.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +11,7 @@ import com.masai.exception.SeedException;
 import com.masai.model.Planter;
 import com.masai.model.Seed;
 import com.masai.repository.SeedDao;
+import com.masai.service.SeedService;
 
 @Service
 public class SeedServiceImpl implements SeedService {

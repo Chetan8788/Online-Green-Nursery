@@ -1,4 +1,4 @@
-package com.masai.service;
+package com.masai.serviceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +15,7 @@ import com.masai.model.Comment;
 import com.masai.model.Planter;
 import com.masai.repository.CommentDao;
 import com.masai.repository.UserDao;
+import com.masai.service.CommentService;
 import com.masai.repository.PlanterDao;
 
 /**
